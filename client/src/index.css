@@ -1,0 +1,155 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
+
+@layer base {
+  /* ─── Warm Wood Palette ─────────────────────────────── */
+  :root {
+    --background:       38 22% 97%;
+    --foreground:       30 18% 14%;
+
+    --card:             38 20% 98%;
+    --card-foreground:  30 18% 14%;
+
+    --popover:          38 20% 98%;
+    --popover-foreground: 30 18% 14%;
+
+    --primary:          22 72% 44%;   /* warm amber-brown */
+    --primary-foreground: 38 30% 97%;
+
+    --secondary:        35 14% 92%;
+    --secondary-foreground: 30 18% 22%;
+
+    --muted:            36 12% 93%;
+    --muted-foreground: 34 8% 50%;
+
+    --accent:           35 14% 92%;
+    --accent-foreground: 30 18% 22%;
+
+    --destructive:      0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border:           34 10% 84%;
+    --input:            34 10% 84%;
+    --ring:             22 72% 44%;
+
+    --radius: 0.5rem;
+
+    /* Typography */
+    --font-body: 'Inter', system-ui, sans-serif;
+    --font-display: 'Manrope', system-ui, sans-serif;
+
+    /* Status colors */
+    --status-new:       22 72% 44%;
+    --status-contacted: 200 65% 40%;
+    --status-done:      140 50% 35%;
+  }
+
+  .dark {
+    --background:       30 15% 8%;
+    --foreground:       38 15% 88%;
+
+    --card:             30 14% 11%;
+    --card-foreground:  38 15% 88%;
+
+    --popover:          30 14% 11%;
+    --popover-foreground: 38 15% 88%;
+
+    --primary:          26 70% 58%;
+    --primary-foreground: 30 18% 10%;
+
+    --secondary:        30 10% 18%;
+    --secondary-foreground: 38 15% 78%;
+
+    --muted:            30 10% 18%;
+    --muted-foreground: 36 8% 54%;
+
+    --accent:           30 10% 18%;
+    --accent-foreground: 38 15% 78%;
+
+    --destructive:      0 62% 40%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border:           30 8% 22%;
+    --input:            30 8% 22%;
+    --ring:             26 70% 58%;
+  }
+}
+
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.6;
+    min-height: 100dvh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  img, picture, video, canvas { display: block; max-width: 100%; }
+  input, button, textarea, select { font: inherit; }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: 0.25rem;
+  }
+
+  button { cursor: pointer; }
+}
+
+/* ─── Furniture type card hover ──────────────────────── */
+.furniture-card {
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+.furniture-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px hsl(22 72% 44% / 0.12);
+}
+.furniture-card.selected {
+  border-color: hsl(var(--primary));
+  box-shadow: 0 0 0 2px hsl(var(--primary) / 0.25);
+}
+
+/* ─── Price badge pulse ─────────────────────────────── */
+@keyframes pricePop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+.price-pop { animation: pricePop 0.4s ease; }
+
+/* ─── Admin table ───────────────────────────────────── */
+.admin-table th {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  @apply text-muted-foreground;
+}
+
+/* ─── Status badges ─────────────────────────────────── */
+.badge-new       { background: hsl(22 72% 44% / 0.12); color: hsl(22 72% 38%); }
+.badge-contacted { background: hsl(200 65% 40% / 0.12); color: hsl(200 65% 34%); }
+.badge-done      { background: hsl(140 50% 35% / 0.12); color: hsl(140 50% 30%); }
+
+.dark .badge-new       { background: hsl(22 72% 44% / 0.2); color: hsl(26 70% 65%); }
+.dark .badge-contacted { background: hsl(200 65% 40% / 0.2); color: hsl(200 65% 60%); }
+.dark .badge-done      { background: hsl(140 50% 35% / 0.2); color: hsl(140 50% 55%); }
