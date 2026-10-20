@@ -13,6 +13,7 @@ import Layout from "@/components/Layout";
 // current bundle size and load behavior.
 const TariffProfilesPage = lazy(() => import("@/pages/TariffProfilesPage"));
 const TariffEditorPage = lazy(() => import("@/pages/TariffEditorPage"));
+const SimpleCalculatorPage = lazy(() => import("@/pages/SimpleCalculatorPage"));
 
 export default function App() {
   return (
@@ -23,6 +24,11 @@ export default function App() {
             <Route path="/" component={CalculatorPage} />
             <Route path="/admin" component={AdminPage} />
             <Route path="/leads" component={LeadsPage} />
+            <Route path="/simple">
+              <Suspense fallback={<p className="text-sm text-muted-foreground">Загрузка…</p>}>
+                <SimpleCalculatorPage />
+              </Suspense>
+            </Route>
             {/* DEV-CP-02 preview routes: tariff profiles and editor */}
             <Route path="/tariffs">
               <Suspense fallback={<p className="text-sm text-muted-foreground">Загрузка…</p>}>
