@@ -13,7 +13,9 @@ Deploy: **не выполнялся**
 |---|---|
 | Repository | `Murkin1980/mebel-kalkulator2` |
 | PR #1 | открыт: `https://github.com/Murkin1980/mebel-kalkulator2/pull/1` |
-| PR #1 head branch / commit | `arena/8e093f08-mebel-kalkulator2` @ `5b8684a13da3b6aa8b7cd46545b7dfe4e1d33f0e` |
+| PR #1 head branch | `arena/8e093f08-mebel-kalkulator2` |
+| PR #1 head commit на старте сессии | `5b8684a13da3b6aa8b7cd46545b7dfe4e1d33f0e` |
+| PR #1 head commit к концу сессии | `0ede19e9a2a82c8c33c6e5e95c8f2e5ca0945563` (+2 CI-коммита `27e18c6`/`0ede19e`: `scripts/browser-qa.mjs` + `.github/workflows/browser-qa.yml`, добавлены в head-ветку PR во время сессии; на локальную проверку не влияли) |
 | Рабочая branch (фиксирована средой) | `arena/34f31b03-mebel-kalkulator2` |
 | Baseline этой сессии | fast-forward рабочей ветки до PR head `5b8684a` |
 | Implementation commits этой сессии | см. §8 |
@@ -182,9 +184,13 @@ Runtime API, схемы БД, движок `shared/pricing/*` не изменя�
 - Нативные confirm/beforeunload не скриншотятся (это chrome UI) — их фактические сообщения
   зафиксированы в `browser-qa-summary.md`.
 - Шкафы, камень и доп. изделия по-прежнему без подтверждённых цен (product-статус, не дефект QA).
-- Отдельный PR для CP-02A не создавался: PR #1 остаётся единственным (head `arena/8e093f08`).
-  Коммиты этой сессии сохранены в рабочей ветке `arena/34f31b03-mebel-kalkulator2` (содержит
-  `5b8684a` как предка). Переписывание/пуш в ветку PR #1 запрещены средой.
+- Отдельный PR для CP-02A не создавался: PR #1 остаётся единственным (head-ветка
+  `arena/8e093f08`). Коммиты этой сессии сохранены в рабочей ветке
+  `arena/34f31b03-mebel-kalkulator2` (содержит `5b8684a` как предка). Переписывание/пуш в ветку
+  PR #1 запрещены средой. В head-ветку PR во время сессии добавлены CI-коммиты
+  (`scripts/browser-qa.mjs`, GitHub Actions workflow для Playwright QA на раннере GitHub) —
+  этот CI здесь не запускался; локальное evidence получено скриптом
+  `evidence/dev-cp-02a/browser-qa.mjs` на реальном Chromium контейнера.
 - Preview dev server — не deploy; production deployment, merge, DEV-CP-03 не выполнялись.
 
 ## 8. Итоговые идентификаторы
