@@ -129,9 +129,9 @@ try {
         await page.getByTestId("simple-calculator").waitFor();
         await page.getByTestId("calc-material").selectOption("kitchen-ldsp-egger");
         await page.getByText("Премиальные фасады (доплата)").click();
-        await page.getByText("Стандартные фасады").locator("..").locator("select").selectOption({label: "QA стандартный"});
-        await page.getByText("Премиальные фасады").locator("..").locator("select").selectOption({label: "QA премиум"});
-        await page.getByText("Площадь фасадов, м²").locator("..").locator("input").fill("4");
+        await page.locator("label").filter({hasText: "Стандартные фасады"}).locator("select").selectOption({label: "QA стандартный"});
+        await page.locator("label").filter({hasText: "Премиальные фасады"}).locator("select").selectOption({label: "QA премиум"});
+        await page.locator("label").filter({hasText: "Площадь фасадов, м²"}).locator("input").fill("4");
         assert.match(await page.getByTestId("calc-total").innerText(), /735\s*000/, "facade price must be only upgrade difference");
         await page.screenshot({path: out + "/cp03-facades-375.png", fullPage: true});
       });
