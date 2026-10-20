@@ -1,0 +1,25 @@
+/* Salamat Mebel site palette; scoped to CP-03 preview so legacy UI is untouched. */
+.salamat-calc {
+  --salamat-ink: #f4f1ea;
+  --salamat-muted: #b9b3aa;
+  --salamat-bg: #111111;
+  --salamat-panel: #232323;
+  --salamat-bronze: #c89a3d;
+  --salamat-bronze-light: #d7a76d;
+  color: var(--salamat-ink);
+  background: radial-gradient(circle at 85% 0%, rgba(200,154,61,.12), transparent 35%), var(--salamat-bg);
+  border: 1px solid rgba(200,154,61,.24);
+  border-radius: 20px;
+  padding: 18px;
+  font-family: Montserrat, sans-serif;
+}
+.salamat-calc .salamat-muted { color: var(--salamat-muted); }
+.salamat-calc .salamat-panel { background: var(--salamat-panel); border: 1px solid rgba(200,154,61,.24); border-radius: 14px; }
+.salamat-calc input:not([type=checkbox]), .salamat-calc select { background: #232323; color: #f4f1ea; border-color: rgba(200,154,61,.45); }
+.salamat-calc select option { background: #232323; color: #f4f1ea; }
+.salamat-calc input[type=checkbox] { accent-color: #c89a3d; }
+.salamat-calc button.salamat-primary { background: var(--salamat-bronze); color: #111111; }
+.salamat-calc button.salamat-choice[aria-pressed=true] { background: var(--salamat-bronze); color: #111111; border-color: var(--salamat-bronze); }
+.salamat-calc button.salamat-choice[aria-pressed=false] { background: var(--salamat-panel); color: var(--salamat-ink); border-color: rgba(200,154,61,.32); }
+.salamat-calc a { color: var(--salamat-bronze-light); }
+.salamat-calc :focus-visible { outline: 2px solid var(--salamat-bronze-light); outline-offset: 2px; }

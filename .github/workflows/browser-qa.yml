@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - arena/8e093f08-mebel-kalkulator2
+      - feature/dev-cp-03-simple-calculator
     paths:
       - ".github/workflows/browser-qa.yml"
       - "scripts/browser-qa.mjs"
