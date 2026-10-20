@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-10-20T19:13:21.371Z",
+  "startedAt": "2026-10-20T19:17:31.279Z",
   "baseUrl": "http://127.0.0.1:5000",
   "browser": {
     "version": "153.0.8010.0",
@@ -94,7 +94,7 @@
         "export-rejected-records": {
           "ok": true,
           "value": {
-            "fileName": "salamat-calc-rejected-profiles-1792523629680.json",
+            "fileName": "salamat-calc-rejected-profiles-1792523879937.json",
             "format": "salamat-calc-rejected-profiles-v1",
             "keys": [
               "corrupt-qa-record"
@@ -443,7 +443,7 @@
         "export-rejected-records": {
           "ok": true,
           "value": {
-            "fileName": "salamat-calc-rejected-profiles-1792523659894.json",
+            "fileName": "salamat-calc-rejected-profiles-1792523910286.json",
             "format": "salamat-calc-rejected-profiles-v1",
             "keys": [
               "corrupt-qa-record"
@@ -792,7 +792,7 @@
         "export-rejected-records": {
           "ok": true,
           "value": {
-            "fileName": "salamat-calc-rejected-profiles-1792523690110.json",
+            "fileName": "salamat-calc-rejected-profiles-1792523940518.json",
             "format": "salamat-calc-rejected-profiles-v1",
             "keys": [
               "corrupt-qa-record"
@@ -2616,7 +2616,7 @@
     }
   ],
   "consoleErrors": [],
-  "finishedAt": "2026-10-20T19:14:52.188Z",
+  "finishedAt": "2026-10-20T19:19:02.676Z",
   "summary": {
     "total": 165,
     "passed": 165,
