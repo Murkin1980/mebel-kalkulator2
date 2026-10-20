@@ -1,6 +1,6 @@
 # DEV-CP-02A — SALAMAT CALC Stabilization & Mobile QA
 
-RESULT: **PARTIAL**
+RESULT: **PASS**
 Дата: 2026-10-20
 MPE decision: `EXTEND_EXISTING`
 Режим: CORRECTIVE / MINIMAL DIFF
@@ -12,161 +12,193 @@ Deploy: **не выполнялся**
 | Поле | Значение |
 |---|---|
 | Repository | `Murkin1980/mebel-kalkulator2` |
-| Base commit (актуальный HEAD PR #1) | `cdf08c7dcdca8eb24434f0e99e760b0e7c7bd933` |
 | PR #1 | открыт: `https://github.com/Murkin1980/mebel-kalkulator2/pull/1` |
-| PR #1 head branch | `arena/8e093f08-mebel-kalkulator2` |
-| Рабочая branch (фиксирована средой) | `arena/6ea47acb-mebel-kalkulator2` |
-| Implementation commit | `97c3408e9255846b08ba7807a1f1463c58a27297` |
+| PR #1 head branch / commit | `arena/8e093f08-mebel-kalkulator2` @ `5b8684a13da3b6aa8b7cd46545b7dfe4e1d33f0e` |
+| Рабочая branch (фиксирована средой) | `arena/34f31b03-mebel-kalkulator2` |
+| Baseline этой сессии | fast-forward рабочей ветки до PR head `5b8684a` |
+| Implementation commits этой сессии | см. §8 |
 | Node / npm | Node `v22.22.3`, npm `10.9.8` |
 
-Рабочая ветка изначально находилась на `350730c`; актуальный PR HEAD был проверен через GitHub и
-fast-forward-ом добавлен в текущую ветку до начала изменений. Незакоммиченных изменений до работы
-не было. PR #1 остаётся открыт и без merge.
+Рабочая ветка изначально находилась на `350730c`; актуальный head PR #1 (`5b8684a`) был получен через
+`git fetch origin pull/1/head` и добавлен fast-forward-ом. Незакоммиченных изменений не было.
 
-Начальная `npm ci` не смогла собрать `better-sqlite3`: prebuilt download завершился ошибкой TLS,
-а запрос Node headers к `nodejs.org` был сброшен. Установлены зафиксированные зависимости через
-`npm ci --ignore-scripts`, затем native binding собран локально (`npm rebuild better-sqlite3
---nodedir=/usr/local`). `package-lock.json` и список зависимостей не изменялись.
+Сессия выполняется в режиме коррекции уже собранных R-1/R-2 (см. §2): реализация и unit-тесты
+сохранены, обязательные команды проходили; итог предыдущего прохода был **PARTIAL** только из-за
+недоступности реального браузера (Browser QA / Browser Storage QA — NOT VERIFIED). Задача этой
+сессии — завершить именно реальную браузерную проверку и зафиксировать факты.
 
-### Baseline на `cdf08c7`
+Установка зависимостей: `npm ci --ignore-scripts`, затем `npm rebuild better-sqlite3
+--nodedir=/usr/local` (prebuilt-download TLS недоступен). `package-lock.json` и список зависимостей
+проекта не изменялись.
 
-| Проверка | Результат |
+## 2. Наследие прошлого прохода (без изменений)
+
+- **R-1 — защита от потери черновика.** Wouter hash-router без блокировки переходов; добавлен
+  совместимый hash-hook `client/src/lib/unsaved-navigation.ts` (guard для Link/навигации/Browser
+  Back/Forward + существующий `beforeunload`), 4 unit-регрессии в `unsaved-navigation.test.ts`.
+- **R-2 — повреждённые записи IndexedDB.** `ProfileStore.load()` возвращает `rejectedProfiles`
+  (key + безопасная причина + raw в памяти), записи не удаляются, экран профилей показывает
+  предупреждение и локальный экспорт оригинала; тесты в `tariff-store.test.ts`.
+
+## 3. Найденные в этой сессии дефекты и исправления
+
+Оба дефекта найдены реальным браузером (Chromium + Playwright), исправлены минимальным diff.
+
+### R-3 — Browser Back/Forward обходил защиту несохранённых изменений (ДЕФЕКТ)
+
+Наблюдение: при dirty-черновике кнопка «Назад» и меню показывали confirm, но **Browser Back/Forward
+переходил без предупреждения** и уничтожал черновик.
+
+Диагностика (страница инструментировалась через `addInitScript`: логи `addEventListener`,
+`window.confirm`, `history.go`, прослушивание `hashchange`):
+
+- Wouter (`use-hash-location.js`) подписывается на `hashchange` при первой React-рендер-подписке
+  `useSyncExternalStore` и на **реальные**, и на свои синтетические события `dispatchEvent`;
+- guard был установлен в `useEffect` — **позже** подписчика Wouter. На `window` обработчики
+  выполняются в порядке регистрации (capture-фаза не даёт приоритет, т.к. target события — само
+  `window`), поэтому при реальном `hashchange` от Back/Forward Wouter реагировал первым, React
+  синхронно размонтировал редактор, и guard-слушатель снимался до вызова `confirm` (подтверждено
+  логами: `confirm` не вызывался, `history.go` не вызывался, событие доходило до поздних
+  слушателей);
+- побочный эффект: при пересоздании guard-замыкания в `approvedRoute` (module-level) могла
+  остаться «хвостовая» маршрутная метка.
+
+Исправление (`client/src/lib/unsaved-navigation.ts`, минимальный diff):
+
+- установка hash-guard **на уровне модуля** (при загрузке, до первого React-рендера и, значит, до
+  подписки Wouter) — порядок регистрации детерминирован: guard всегда первый слушатель `hashchange`
+  и может `stopImmediatePropagation()` до размонтирования редактора;
+- `useEffect`-установка оставлена как fallback (флаг `hashListenerInstalled` исключает повтор);
+- уточнён комментарий (capture-фаза не является механизмом приоритета).
+
+### R-4 — маленькая зона нажатия чекбоксов «Включённые услуги» (ДЕФЕКТ)
+
+Наблюдение (320/375/430 px): Radix-checkbox `16×16`, подпись без `min-h-11` — суммарная зона
+нажатия `~177×20`, ниже минимума 24 px и ниже собственной конвенции интерфейса `min-h-11`.
+
+Исправление (`client/src/components/tariffs/TariffForm.tsx`, 1 строка): подпись услуги получила
+`flex min-h-11 flex-1 items-center` — зона нажатия стала `~239×44`; клик по подписи переключает
+чекбокс (проверено реальным браузером: `aria-checked` меняется, label→button activation работает).
+
+## 4. Реальная браузерная проверка (Mobile QA + Browser Storage QA)
+
+**BROWSER_STORAGE_QA: VERIFIED (реальный IndexedDB)**
+**MOBILE QA: VERIFIED (320 / 375 / 430 px)**
+
+Движок: **реальный Chromium `153.0.8010.0`** (headless) под управлением **playwright-core 1.64.1**.
+В контейнере нет системного браузера и доступа к Playwright/Chrome CDN; бинарник взят из npm-пакета
+`@sparticuz/chromium` (сам Chromium внутри tarball), недостающие системные `libnspr4/libnss3/…`
+подключены из архива `al2023.tar` того же пакета через `LD_LIBRARY_PATH`. Это настоящий
+Chromium-рендеринг + настоящий IndexedDB, не статические/SSR-проверки.
+
+Скрипт проверки (сохранён как воспроизводимое evidence):
+`evidence/dev-cp-02a/browser-qa.mjs`; сводка — `evidence/dev-cp-02a/browser-qa-summary.md`.
+Итог прогона: **103 проверки PASS, 0 FAIL** (список в сводке).
+
+### 4.1 Вёрстка 320 / 375 / 430 px
+
+| Сценарий | 320 | 375 | 430 |
+|---|---|---|---|
+| Профили (пустой список / с данными / диалог создания) | PASS | PASS | PASS |
+| Редактор (параметры / форма тарифа / длинное имя / sticky-панель) | PASS | PASS | PASS |
+| Нет горизонтальной прокрутки (`documentElement`/`body` ≤ viewport) | PASS | PASS | PASS |
+| Нет обрезанных/вылезающих полей и элементов | PASS | PASS | PASS |
+| Нет недоступных/слишком мелких (<24 px) контроллов | PASS | PASS | PASS |
+| Реальные PNG-скриншоты | есть | есть | есть |
+
+Замечание (не дефектируется): `theme-toggle` в шапке — `34×34` (существующий элемент вне тарифного
+редактора; кликабелен, фиксируется как наблюдение).
+
+### 4.2 Реальный IndexedDB (`salamat-calc`)
+
+| Сценарий | Результат |
 |---|---|
-| Незакоммиченные изменения | отсутствовали |
-| `npm test` | PASS — **87/87**, 18 suites |
-| `npm run check` | PASS |
-| `npm run build` | PASS; существующее предупреждение о порядке CSS `@import` и устаревшем Browserslist |
+| Создание профиля (3 шт., по одному на каждую ширину) → редактор | PASS |
+| Записи видны при прямом чтении `profiles` store из страницы | PASS (`["QA 320","QA 375","QA 430"]`) |
+| Редактирование: новый тариф «QA кухня EGGER 18 мм», цена 55000, «Цена подтверждена» → «Сохранить» | PASS |
+| Прямое чтение сохранённой записи из IndexedDB | PASS (`priceKzt=55000, isConfirmed=true`, version=2) |
+| Полная перезагрузка → повторное открытие: имя, тариф, цена, подтверждение на месте | PASS |
+| Выбор активного профиля → перезагрузка → бейдж «активный» сохранён (meta store) | PASS |
+| Шаблон Salamat Mebel: read-only баннер, нет панели сохранения, «Создать копию и редактировать» | PASS |
+| Повреждённые записи (`qa-broken-001/002` вставлены напрямую в store) | не участвуют в списке, показаны с ключами и причинами |
+| Экспорт повреждённых записей | PASS: скачан `salamat-calc-rejected-profiles-v1` JSON с raw-записями (см. `rejected-export-sample.json`), только по нажатию, без сервера |
+| Повреждённые записи не удаляются молча (после reload предупреждение остаётся) | PASS |
 
-## 2. Изменения и причина исправлений
+### 4.3 Навигация, несохранённые изменения, Back/Forward
 
-### R-1 — защита от потери черновика
-
-Причина: Wouter 3 в используемом hash-router не предоставляет блокировку переходов; существующий
-`beforeunload` защищал только закрытие/перезагрузку документа, а ручная проверка была только у кнопки
-«Назад». `Link`, верхнее меню, программная навигация и Browser Back/Forward могли уничтожить редактор
-без подтверждения.
-
-Исправление:
-
-- добавлен минимальный совместимый с Wouter hash-hook в `client/src/lib/unsaved-navigation.ts`;
-  внутренняя навигация через Wouter `Link`/`navigate` проверяет текущий dirty editor;
-- изменение hash при Browser Back/Forward перехватывается до подписчиков Wouter; при отказе маршрут
-  истории возвращается, редактор не размонтируется;
-- подтверждение спрашивается один раз: остаться/отмена сохраняет черновик в смонтированном редакторе,
-  явное подтверждение разрешает выход без сохранения;
-- существующий `beforeunload` сохранён для обновления/закрытия вкладки;
-- после успешного сохранения новой копии навигация разрешается без второго подтверждения;
-- guard удаляется при cleanup, основной калькулятор не регистрирует guard и не блокируется.
-
-Добавлены четыре unit-регрессии решений guard (чистый переход, отказ от выхода, очистка блокировки,
-навигация после durable-копии). Реальные сценарии с браузерными событиями не запускались из-за
-отсутствия браузерного движка в среде; см. Mobile/Browser QA ниже. Поэтому R-1 реализован и покрыт
-логическими тестами, но реальное поведение Back/Forward остаётся не подтверждено браузером.
-
-### R-2 — повреждённые записи IndexedDB
-
-Причина: чтение пропускало невалидные записи и выводило только `console.warn`; пользователь не видел,
-что профиль исключён, и не мог сохранить исходную запись.
-
-Исправление:
-
-- `ProfileStore.load()` теперь возвращает валидные профили отдельно от `rejectedProfiles`;
-  отклонённая запись содержит IndexedDB key, безопасную причину (без значений полей) и исходный raw
-  объект в памяти;
-- невалидные записи и записи, пытающиеся подменить шаблон Salamat Mebel, остаются в IndexedDB и
-  не участвуют в списке доступных расчётов;
-- экран профилей показывает количество/ключи/причины ошибок и предлагает явный локальный экспорт
-  оригинальных записей; экспорт запускается только по нажатию, серверу данные не передаются;
-- обработчики чтения/записи не заменяют ошибку пустым профилем; недоступность IndexedDB уже даёт
-  явное сообщение и режим памяти, а ошибка чтения оставляет статус ошибки вместо ложного успеха.
-
-Проверены тестами (in-memory IndexedDB test double): сохранение/повторное чтение, активный профиль,
-удаление и сохранность оставшихся, шаблон (включая подменяющую запись), отказ валидации, недоступная
-IndexedDB, атомарная запись профиля вместе с active marker и откат при ошибке транзакции, сохранение
-повреждённой записи без удаления при одновременном показе валидных профилей.
-
-Эти тесты не заменяют реальный browser IndexedDB QA. Исправление не добавляет автоматическое
-восстановление/удаление; восстановление — только исходный JSON по явному запросу.
-
-## 3. Изменённые файлы
-
-| Файл | Изменение |
+| Сценарий | Результат |
 |---|---|
-| `client/src/lib/unsaved-navigation.ts` | централизованный Wouter-compatible блокировщик dirty draft и native history |
-| `client/src/App.tsx` | подключение hash-hook с навигационной защитой; Wouter сохранён |
-| `client/src/pages/TariffEditorPage.tsx` | регистрация dirty state; сохранён `beforeunload`; безопасный переход после копирования |
-| `client/src/lib/tariff-store.ts` | результат чтения включает диагностику повреждённых записей; сырьё не удаляется |
-| `client/src/components/tariffs/TariffProfilesProvider.tsx` | передача diagnostic records экрану профилей |
-| `client/src/pages/TariffProfilesPage.tsx` | явное предупреждение и локальный экспорт raw rejected records |
-| `client/src/lib/tests/unsaved-navigation.test.ts` | 4 регрессионных теста решений guard |
-| `client/src/lib/tests/tariff-store.test.ts` | тесты повреждённых записей и атомарного abort |
-| `client/src/lib/tests/fake-indexeddb.ts` | getAllKeys и staging/abort в тестовом хранилище |
-| `package.json` | новый тестовый файл включён в `npm test` |
+| Кнопка «Назад» при dirty → confirm «Есть несохранённые изменения. Выйти без сохранения?» | PASS |
+| Отмена → редактор и черновик сохранены (имя в поле не потеряно) | PASS |
+| Browser Back при dirty → confirm; отмена → история восстановлена (`#/tariffs/:id` остался), черновик цел | PASS (после R-3) |
+| Browser Back + подтверждение выхода → переход на список профилей | PASS |
+| Browser Forward → редактор переоткрыт из хранилища (непройденный черновик сброшен — ожидаемо) | PASS |
+| Меню/ссылки при dirty тоже под confirm; после «Сохранить» выход без второго confirm | PASS |
+| `beforeunload` при перезагрузке с dirty-черновиком | PASS (диалог `beforeunload` реально срабатывает) |
+| Чистый выход без dirty → confirm не показывается | PASS |
 
-Новых runtime/development-зависимостей нет. `server/*`, `shared/schema.ts`, `shared/pricing/*`,
-SQLite и действующий API не менялись.
+### 4.4 Скриншоты
 
-## 4. Проверки после изменений
+`evidence/dev-cp-02a/browser/` — **28 реальных PNG** (Chromium, DPR=2, ширина 640/750/860 = 320/375/430 css-px),
+включая: `profiles-empty-*`, `profiles-create-dialog-*`, `profiles-with-profiles-*`,
+`profiles-active-375w`, `profiles-rejected-warning-*`, `editor-after-create-*`, `editor-profile-320w/430w`,
+`editor-tariff-form-*`, `editor-saved-375w`, `editor-reopened-375w`, `editor-template-375w`,
+`editor-dirty-save-bar-*`, `nav-confirm-stayed-*`; плюс `rejected-export-sample.json`.
+Ни одного фиктивного изображения.
+
+## 5. Обязательные проверки после исправлений
 
 | Проверка | Результат |
 |---|---|
 | `npm test` | PASS — **93/93**, 19 suites |
 | `npm run check` | PASS |
-| `npm run build` | PASS; те же ранее существовавшие CSS/Browserslist warnings |
-| Dev server | запущен; `GET /` → 200, `GET /api/settings` → 200 |
-| Regression `/api/calculate` | `POST` с прежним fixture вернул `{"basePrice":56100,"markupPercent":30,"finalPrice":72930,"deadline":21,"area":6.6}` |
-| API / SQLite diff | отсутствует; API route, схемы и файлы хранения не изменены |
-| Pricing Engine | четыре метода и независимость сервера покрыты прежними тестами; preview остаётся локальным |
-| Salamat wardrobe / included services | требования существующего pricing engine остаются проверены тестами CP-01/02; файлы движка не изменялись |
+| `npm run build` | PASS; client `index.js` 284.01 kB (gzip 90.77 kB) + lazy chunks (TariffProfilesProvider 103.82 kB и др.), server `dist/index.cjs` 924.4 kB; прежние warnings по CSS `@import`/Browserslist |
+| Dev server | `GET /` → 200, `GET /api/settings` → 200 |
+| Regression `/api/calculate` | `POST` (kitchen, 220×300×60, mat_ldsp, hw_econom) → `{"basePrice":56100,"markupPercent":30,"finalPrice":72930,"deadline":21,"area":6.6}` — совпадает с прежним fixture |
+| API / SQLite diff | отсутствует; `server/*`, `shared/pricing/*`, `shared/schema.ts`, миграции не изменялись |
+| Зависимости | без изменений (`package-lock.json` не тронут); QA-инструменты установлены вне репозитория |
 
-## 5. Mobile QA и Browser Storage QA
+## 6. Изменённые файлы этой сессии
 
-**BROWSER_STORAGE_QA: NOT VERIFIED**
-**MOBILE QA: NOT VERIFIED**
-
-В контейнере отсутствуют исполняемые Chromium/Chrome/Firefox (`which chromium chromium-browser
-google-chrome firefox` не нашёл браузер). Browser automation tools и установленный browser binary
-недоступны. Предыдущий checkpoint DEV-CP-02 фиксировал, что установка Chromium Playwright CDN блокируется
-сетевой политикой, а Chromium package требует отсутствующие системные библиотеки `libnspr4.so`,
-`libnss3.so`, `libnssutil3.so`. Поэтому реальный браузерный движок и настоящий IndexedDB в этом
-checkpoint не запускались.
-
-| Viewport / сценарий | Результат |
+| Файл | Изменение |
 |---|---|
-| 320 px — список профилей / редактор / диалоги / ввод | NOT VERIFIED |
-| 375 px — список профилей / редактор / диалоги / ввод | NOT VERIFIED |
-| 430 px — список профилей / редактор / диалоги / ввод | NOT VERIFIED |
-| Реальные скриншоты | отсутствуют; фиктивные изображения не создавались |
-| Реальный IndexedDB: create/edit/save/reload/reopen/active/export/import conflict copy | NOT VERIFIED |
-| Browser Back/Forward при dirty draft, stay/discard | NOT VERIFIED |
+| `client/src/lib/unsaved-navigation.ts` | R-3: установка hash-guard на уровне модуля (первый слушатель `hashchange`), комментарий |
+| `client/src/components/tariffs/TariffForm.tsx` | R-4: зона нажатия подписи услуги `min-h-11` |
+| `docs/checkpoints/DEV-CP-02A-RESULTS.md` | настоящий отчёт |
+| `evidence/dev-cp-02a/browser/*` | 28 реальных PNG + `rejected-export-sample.json` |
+| `evidence/dev-cp-02a/browser-qa.mjs` | воспроизводимый скрипт браузерной проверки |
+| `evidence/dev-cp-02a/browser-qa-summary.md` | журнал 103 проверок, диалогов и скриншотов |
 
-Статические/SSR и fake IndexedDB-тесты не засчитаны как mobile visual QA или real storage QA.
+Runtime API, схемы БД, движок `shared/pricing/*` не изменялись. Deep-change: **нет**.
 
-## 6. Ограничения / deep-change / PR
+## 7. Ограничения
 
-- Итог — `PARTIAL`: R-1/R-2 реализованы, обязательные команды проходят, но требуемые реальные
-  браузерные и трёх viewport QA недоступны в среде.
-- Deep-change: **нет**. Роутинг Wouter сохранён; новый backend, инфраструктура, миграция SQLite,
-  изменение API и новые зависимости отсутствуют.
-- Рабочая ветка Arena фиксирована как `arena/6ea47acb-mebel-kalkulator2`, в то время как PR #1
-  указывает head на `arena/8e093f08-mebel-kalkulator2`. Переключение/пуш в PR head branch запрещены
-  текущей средой; дублирующий второй PR не создавался. PR #1 остаётся OPEN без merge, но его head
-  не содержит этот commit; реализация сохранена в рабочей ветке.
-- Preview dev server — не deploy; deployment не выполнялся.
+- Браузер — headless Chromium 153 из npm-бандла (`@sparticuz/chromium`) под playwright-core, а не
+  штатный Playwright-Chromium (CDN браузеров недоступен политикой сети контейнера). Поведение
+  реальное (Blink/IndexedDB/History API); отличия от канонической сборки Playwright теоретически
+  возможны, практических расхождений в прогоне не замечено.
+- Системная кнопка `theme-toggle` в шапке — `34×34` (меньше конвенции `min-h-11`); элемент
+  существовал до CP-02 и не блокирует работу; зафиксировано как наблюдение, не исправлялось.
+- Нативные confirm/beforeunload не скриншотятся (это chrome UI) — их фактические сообщения
+  зафиксированы в `browser-qa-summary.md`.
+- Шкафы, камень и доп. изделия по-прежнему без подтверждённых цен (product-статус, не дефект QA).
+- Отдельный PR для CP-02A не создавался: PR #1 остаётся единственным (head `arena/8e093f08`).
+  Коммиты этой сессии сохранены в рабочей ветке `arena/34f31b03-mebel-kalkulator2` (содержит
+  `5b8684a` как предка). Переписывание/пуш в ветку PR #1 запрещены средой.
+- Preview dev server — не deploy; production deployment, merge, DEV-CP-03 не выполнялись.
 
-## 7. Итоговые идентификаторы
+## 8. Итоговые идентификаторы
 
-- Base commit: `cdf08c7dcdca8eb24434f0e99e760b0e7c7bd933`
-- Source implementation commit: `97c3408e9255846b08ba7807a1f1463c58a27297`
-- Evidence file is committed separately as a documentation-only follow-up; branch final HEAD is
-  reported in the final session report.
-- Branch: `arena/6ea47acb-mebel-kalkulator2`
-- PR #1: OPEN, no merge
+- PR #1 head: `5b8684a13da3b6aa8b7cd46545b7dfe4e1d33f0e` (без merge)
+- Рабочая branch: `arena/34f31b03-mebel-kalkulator2` (fast-forward `5b8684a` + коммиты сессии;
+  финальный HEAD — в отчёте сессии)
+- Evidence: `evidence/dev-cp-02a/browser/` (28 PNG + JSON), `evidence/dev-cp-02a/browser-qa.mjs`,
+  `evidence/dev-cp-02a/browser-qa-summary.md`
 
-## 8. Следующее авторизованное действие
+## 9. Следующее авторизованное действие
 
-Перед объявлением полного PASS нужно выполнить реальный проход на браузерном движке: три viewport
-(320/375/430), dirty-draft navigation включая Back/Forward, native beforeunload, настоящий IndexedDB
-workflow из checkpoint brief, затем сохранить браузерные скриншоты/evidence. DEV-CP-03 не начат.
+Mobile QA и Browser Storage QA пройдены реальным браузером; R-1/R-2 подтверждены вживую (после
+исправления R-3), R-4 исправлен. Итог — **PASS**. Merge/deploy — только по отдельному решению
+владельца. DEV-CP-03 не начат.
 
 STOP.

@@ -1,0 +1,23 @@
+{
+  "format": "salamat-calc-rejected-profiles-v1",
+  "exportedAt": "2026-10-20T19:06:42.424Z",
+  "records": [
+    {
+      "key": "qa-broken-001",
+      "reason": "Не пройдена проверка полей: name, schemaVersion, version, currency, categories",
+      "raw": {
+        "profileId": "qa-broken-001",
+        "schemaVersion": 999999
+      }
+    },
+    {
+      "key": "qa-broken-002",
+      "reason": "Не пройдена проверка полей: name, version, currency, categories, calculationMethod",
+      "raw": {
+        "profileId": "qa-broken-002",
+        "schemaVersion": 1,
+        "name": 42
+      }
+    }
+  ]
+}
