@@ -6,6 +6,7 @@
  * uses the draft and never calls the server.
  */
 import { useEffect, useMemo, useRef, useState } from "react";
+import { navigateAfterSave, useUnsavedNavigationProtection } from "@/lib/unsaved-navigation";
 import { Link, useLocation, useParams } from "wouter";
 import { AlertTriangle, ArrowLeft, Check, Copy, Plus, Save, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -102,6 +103,7 @@ function TariffEditorPageInner() {
   }, [source?.profileId, source?.version, status]);
 
   const dirty = Boolean(draft && base && comparable(draft) !== comparable(base));
+  useUnsavedNavigationProtection(dirty);
 
   const validation = useMemo(() => {
     if (!draft) return { profile: null as TariffProfile | null, issues: [] as Issue[] };
@@ -127,11 +129,6 @@ function TariffEditorPageInner() {
   function updateDraft(next: TariffProfile) {
     setDraft(next);
     setSavedAt(null);
-  }
-
-  function guardLeave(): boolean {
-    if (!dirty) return true;
-    return window.confirm("Есть несохранённые изменения. Выйти без сохранения?");
   }
 
   async function handleSave() {
@@ -174,7 +171,7 @@ function TariffEditorPageInner() {
       allProfiles.map((profile) => profile.name),
     );
     const saved = await saveProfile(copy, { setActive: false });
-    if (saved) navigate(`/tariffs/${copy.profileId}`);
+    if (saved) navigateAfterSave(() => navigate(`/tariffs/${copy.profileId}`));
   }
 
   if (!source) {
@@ -224,7 +221,7 @@ function TariffEditorPageInner() {
           size="icon"
           className="h-11 w-11 shrink-0"
           aria-label="Назад к профилям"
-          onClick={() => guardLeave() && navigate("/tariffs")}
+          onClick={() => navigate("/tariffs")}
           data-testid="back-to-profiles"
         >
           <ArrowLeft size={18} />

@@ -6,6 +6,7 @@ import {
   isIndexedDbAvailable,
   ProfileStoreError,
   ProfileStoreUnavailableError,
+  META_STORE,
   STORE_DB_NAME,
 } from "../tariff-store";
 import { installFakeIndexedDb } from "./fake-indexeddb";
@@ -24,9 +25,12 @@ function profileNamed(name: string, takenIds: string[] = []): TariffProfile {
 
 describe("IndexedDB storage", () => {
   let restore: () => void;
+  let getDatabase: ReturnType<typeof installFakeIndexedDb>["getDatabase"];
 
   before(() => {
-    restore = installFakeIndexedDb().restore;
+    const fake = installFakeIndexedDb();
+    restore = fake.restore;
+    getDatabase = fake.getDatabase;
   });
 
   after(() => {
@@ -93,6 +97,38 @@ describe("IndexedDB storage", () => {
     assert.equal(stored.tariffs[0].priceKzt, 175000);
   });
 
+  it("aborts a combined profile and active-marker write on transaction failure", async () => {
+    const store = createIndexedDbStore();
+    await store.load();
+    const database = getDatabase(STORE_DB_NAME)!;
+    const originalTransaction = database.transaction.bind(database);
+    const oldActiveId = database.rawStore(META_STORE).data.get("activeProfileId");
+    database.transaction = ((names: string[], mode: "readonly" | "readwrite") => {
+      const transaction = originalTransaction(names, mode);
+      const originalObjectStore = transaction.objectStore.bind(transaction);
+      transaction.objectStore = ((name: string) => {
+        const objectStore = originalObjectStore(name);
+        if (name !== META_STORE) return objectStore;
+        return {
+          ...objectStore,
+          put() {
+            throw new Error("simulated transaction failure");
+          },
+        } as IDBObjectStore;
+      }) as typeof transaction.objectStore;
+      return transaction;
+    }) as unknown as typeof database.transaction;
+
+    try {
+      const profile = profileNamed("Не должен записаться частично");
+      await assert.rejects(() => store.saveProfile(profile, profile.profileId), /simulated transaction failure/);
+      assert.equal(database.rawStore("profiles").data.has(profile.profileId), false);
+      assert.equal(database.rawStore(META_STORE).data.get("activeProfileId"), oldActiveId);
+    } finally {
+      database.transaction = originalTransaction;
+    }
+  });
+
   it("refuses to write or delete the template profile", async () => {
     const store = createIndexedDbStore();
     await assert.rejects(() => store.saveProfile(salamatMebelProfile), ProfileStoreError);
@@ -110,6 +146,30 @@ describe("IndexedDB storage", () => {
 
     const state = await store.load();
     assert.equal(state.profiles.some((item) => item.profileId === profile.profileId), false);
+  });
+
+  it("reports invalid stored rows without deleting them or hiding valid profiles", async () => {
+    const store = createIndexedDbStore();
+    const valid = profileNamed("Сохранился рядом с повреждением");
+    await store.saveProfile(valid);
+    const raw = { profileId: "user-damaged", name: "Broken profile", tariffs: [{ priceKzt: -1 }] };
+    const templateShadow = { ...salamatMebelProfile, name: "Подменённый шаблон" };
+    const rawStore = getDatabase(STORE_DB_NAME)!.rawStore("profiles").data;
+    rawStore.set("user-damaged", raw);
+    rawStore.set(TEMPLATE_PROFILE_ID, templateShadow);
+
+    const state = await createIndexedDbStore().load();
+    assert.ok(state.profiles.some((profile) => profile.profileId === valid.profileId));
+    assert.equal(state.profiles.some((profile) => profile.profileId === TEMPLATE_PROFILE_ID), false);
+    assert.equal(state.rejectedProfiles.length, 2);
+    assert.equal(state.rejectedProfiles[0].key, "user-damaged");
+    assert.match(state.rejectedProfiles[0].reason, /схем|провер/i);
+    assert.deepEqual(state.rejectedProfiles[0].raw, raw);
+    const rejectedTemplate = state.rejectedProfiles.find((record) => record.key === TEMPLATE_PROFILE_ID);
+    assert.equal(rejectedTemplate?.reason, "Запись пытается подменить защищённый шаблон");
+    assert.deepEqual(rejectedTemplate?.raw, templateShadow);
+    assert.deepEqual(rawStore.get("user-damaged"), raw);
+    assert.deepEqual(rawStore.get(TEMPLATE_PROFILE_ID), templateShadow);
   });
 
   it("deletes a profile and moves the active marker", async () => {

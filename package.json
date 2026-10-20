@@ -8,7 +8,7 @@
     "build": "tsx script/build.ts",
     "start": "NODE_ENV=production node dist/index.cjs",
     "check": "tsc",
-    "test": "TSX_TSCONFIG_PATH=tsconfig.test.json node --import tsx --test shared/pricing/tests/engine.test.ts shared/pricing/tests/profile.test.ts client/src/lib/tests/tariff-profiles.test.ts client/src/lib/tests/tariff-store.test.ts client/src/lib/tests/pages-smoke.test.tsx",
+    "test": "TSX_TSCONFIG_PATH=tsconfig.test.json node --import tsx --test shared/pricing/tests/engine.test.ts shared/pricing/tests/profile.test.ts client/src/lib/tests/tariff-profiles.test.ts client/src/lib/tests/tariff-store.test.ts client/src/lib/tests/unsaved-navigation.test.ts client/src/lib/tests/pages-smoke.test.tsx",
     "db:push": "drizzle-kit push"
   },
   "dependencies": {

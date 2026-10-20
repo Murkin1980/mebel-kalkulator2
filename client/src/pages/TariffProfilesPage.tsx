@@ -33,13 +33,31 @@ function downloadProfile(profile: TariffProfile) {
   URL.revokeObjectURL(url);
 }
 
+function downloadRejectedProfiles(records: { key: string; reason: string; raw: unknown }[]) {
+  const recovery = {
+    format: "salamat-calc-rejected-profiles-v1",
+    exportedAt: new Date().toISOString(),
+    records,
+  };
+  const json = JSON.stringify(recovery, null, 2);
+  if (!json) throw new Error("Повреждённые данные нельзя представить в JSON");
+  const url = URL.createObjectURL(new Blob([json], { type: "application/json" }));
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `salamat-calc-rejected-profiles-${Date.now()}.json`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
 function formatUpdatedAt(value: string): string {
   const date = new Date(value);
   return Number.isNaN(date.getTime()) ? value : date.toLocaleString("ru-RU", { dateStyle: "short", timeStyle: "short" });
 }
 
 function TariffProfilesPageInner() {
-  const { allProfiles, userProfiles, activeProfileId, status, storageMessage, lastError, clearError, saveProfile, setActiveProfile, deleteProfile } =
+  const { allProfiles, userProfiles, activeProfileId, rejectedProfiles, status, storageMessage, lastError, clearError, saveProfile, setActiveProfile, deleteProfile } =
     useTariffProfiles();
   const [, navigate] = useLocation();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -52,6 +70,7 @@ function TariffProfilesPageInner() {
   const [importPreview, setImportPreview] = useState<{ profile: TariffProfile; renamedId: boolean; conflictWith: string | null; fileName: string } | null>(null);
   const [importError, setImportError] = useState<{ message: string; issues?: string[] } | null>(null);
   const [pendingJson, setPendingJson] = useState<string | null>(null);
+  const [diagnosticExportError, setDiagnosticExportError] = useState<string | null>(null);
 
   async function handleCreate() {
     const profile = createProfileFromSource({
@@ -138,6 +157,41 @@ function TariffProfilesPageInner() {
           {storageMessage}
         </div>
       )}
+      {rejectedProfiles.length > 0 && (
+        <section className="rounded-lg border border-amber-400 bg-amber-50 p-3 text-sm text-amber-950 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-200" role="alert" data-testid="rejected-profiles-warning">
+          <div className="flex items-start gap-2">
+            <AlertTriangle size={16} className="mt-0.5 shrink-0" />
+            <div className="min-w-0 flex-1 space-y-2">
+              <p className="font-semibold">Найдено повреждённых записей: {rejectedProfiles.length}</p>
+              <p className="text-xs">Они не участвуют в расчётах и не удалялись. Причина указана без содержимого записи.</p>
+              <p className="text-xs">Файл восстановления содержит исходные локальные данные и создаётся только по нажатию; на сервер он не отправляется.</p>
+              <ul className="space-y-1 text-xs">
+                {rejectedProfiles.map(({ key, reason }) => (
+                  <li key={key} className="break-all"><span className="font-medium">{key}:</span> {reason}</li>
+                ))}
+              </ul>
+              <Button
+                variant="outline"
+                className="min-h-11 max-w-full whitespace-normal text-left"
+                onClick={() => {
+                  try {
+                    downloadRejectedProfiles(rejectedProfiles);
+                    setDiagnosticExportError(null);
+                  } catch (error) {
+                    setDiagnosticExportError(error instanceof Error ? error.message : "Не удалось создать файл восстановления");
+                  }
+                }}
+                data-testid="export-rejected-profiles"
+              >
+                <Download size={14} className="mr-2 shrink-0" />
+                Скачать исходные записи для восстановления
+              </Button>
+              {diagnosticExportError && <p className="text-xs text-destructive" role="alert">{diagnosticExportError}</p>}
+            </div>
+          </div>
+        </section>
+      )}
+
       {status === "error" && lastError && (
         <div className="rounded-lg border border-destructive/40 bg-destructive/5 p-3 text-xs text-destructive" role="alert">
           {lastError}

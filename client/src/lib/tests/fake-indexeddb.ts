@@ -2,7 +2,7 @@
  * Minimal in-memory IndexedDB stand-in for the DEV-CP-02 storage tests.
  *
  * It implements only the API surface used by `tariff-store.ts` — open/upgrade,
- * transactions, get/getAll/put/delete — so the real IndexedDB code path can be
+ * transactions, get/getAll/getAllKeys/put/delete — so the real IndexedDB code path can be
  * tested in Node without adding a dependency or a real browser.
  */
 type StoreName = string;
@@ -18,6 +18,8 @@ class FakeTransaction {
   readonly error: Error | null = null;
   private pending = 0;
   private completed = false;
+  private aborted = false;
+  private operations: Array<() => void> = [];
   private completeHandler: (() => void) | null = null;
   onerror: (() => void) | null = null;
   onabort: (() => void) | null = null;
@@ -45,13 +47,23 @@ class FakeTransaction {
     return {
       get: (key: IDBValidKey) => this.request(store.data.get(String(key)) as unknown),
       getAll: () => this.request(Array.from(store.data.values()) as unknown),
-      put: (value: unknown, key?: IDBValidKey) => this.request(this.db.put(name, value, key) as unknown),
-      delete: (key: IDBValidKey) => this.request(this.db.remove(name, String(key)) as unknown),
+      getAllKeys: () => this.request(Array.from(store.data.keys()) as unknown),
+      put: (value: unknown, key?: IDBValidKey) => {
+        const recordKey = this.db.keyFor(name, value, key);
+        this.operations.push(() => this.db.put(name, value, recordKey));
+        return this.request(recordKey as unknown);
+      },
+      delete: (key: IDBValidKey) => {
+        this.operations.push(() => this.db.remove(name, String(key)));
+        return this.request(undefined);
+      },
     } as FakeObjectStore;
   }
 
   abort(): void {
+    this.aborted = true;
     this.completed = true;
+    this.operations = [];
   }
 
   private request<T>(value: T): FakeRequest<T> {
@@ -66,7 +78,10 @@ class FakeTransaction {
     this.pending -= 1;
     if (this.pending === 0 && !this.completed) {
       this.completed = true;
-      this.deliver(() => this.completeHandler?.());
+      this.deliver(() => {
+        if (!this.aborted) this.operations.forEach((operation) => operation());
+        this.completeHandler?.();
+      });
     }
   }
 }
@@ -74,6 +89,7 @@ class FakeTransaction {
 type FakeObjectStore = {
   get(key: IDBValidKey): FakeRequest<unknown>;
   getAll(): FakeRequest<unknown[]>;
+  getAllKeys(): FakeRequest<IDBValidKey[]>;
   put(value: unknown, key?: IDBValidKey): FakeRequest<IDBValidKey>;
   delete(key: IDBValidKey): FakeRequest<undefined>;
 };
@@ -107,15 +123,18 @@ export class FakeDatabase {
     return store;
   }
 
-  put(storeName: StoreName, value: unknown, key?: IDBValidKey): IDBValidKey {
+  keyFor(storeName: StoreName, value: unknown, key?: IDBValidKey): string {
     const store = this.rawStore(storeName);
-    const recordKey =
-      key !== undefined
-        ? String(key)
-        : store.keyPath
-          ? String((value as Record<string, unknown>)[store.keyPath])
-          : String(store.data.size);
-    store.data.set(recordKey, value);
+    return key !== undefined
+      ? String(key)
+      : store.keyPath
+        ? String((value as Record<string, unknown>)[store.keyPath])
+        : String(store.data.size);
+  }
+
+  put(storeName: StoreName, value: unknown, key?: IDBValidKey): IDBValidKey {
+    const recordKey = this.keyFor(storeName, value, key);
+    this.rawStore(storeName).data.set(recordKey, value);
     return recordKey;
   }
 
@@ -133,7 +152,7 @@ export class FakeDatabase {
   }
 }
 
-export function installFakeIndexedDb(): { restore: () => void } {
+export function installFakeIndexedDb(): { restore: () => void; getDatabase: (name: string) => FakeDatabase | undefined } {
   const databases = new Map<string, { db: FakeDatabase; version: number }>();
 
   const fake = {
@@ -173,6 +192,7 @@ export function installFakeIndexedDb(): { restore: () => void } {
   });
 
   return {
+    getDatabase: (name) => databases.get(name)?.db,
     restore: () => {
       if (descriptor) Object.defineProperty(globalThis, "indexedDB", descriptor);
       else delete (globalThis as { indexedDB?: unknown }).indexedDB;

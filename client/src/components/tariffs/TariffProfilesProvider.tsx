@@ -27,6 +27,7 @@ interface TariffProfilesContextValue {
   allProfiles: TariffProfile[];
   activeProfileId: string | null;
   activeProfile: TariffProfile;
+  rejectedProfiles: ProfileStoreState["rejectedProfiles"];
   lastError: string | null;
   clearError(): void;
   getProfile(profileId: string): TariffProfile | undefined;
@@ -47,7 +48,7 @@ export function TariffProfilesProvider({ children }: { children: React.ReactNode
   const storeRef = useRef<ProfileStore | null>(null);
   const [status, setStatus] = useState<StorageStatus>("loading");
   const [storageMessage, setStorageMessage] = useState<string | null>(null);
-  const [state, setState] = useState<ProfileStoreState>({ profiles: [], activeProfileId: null });
+  const [state, setState] = useState<ProfileStoreState>({ profiles: [], activeProfileId: null, rejectedProfiles: [] });
   const [lastError, setLastError] = useState<string | null>(null);
 
   const store = useCallback((): ProfileStore => {
@@ -121,6 +122,7 @@ export function TariffProfilesProvider({ children }: { children: React.ReactNode
             ? previous.profiles.map((item) => (item.profileId === profile.profileId ? profile : item))
             : [...previous.profiles, profile].sort((a, b) => a.name.localeCompare(b.name, "ru"));
           return {
+            ...previous,
             profiles: nextProfiles,
             activeProfileId: setActive ?? previous.activeProfileId,
           };
@@ -155,7 +157,7 @@ export function TariffProfilesProvider({ children }: { children: React.ReactNode
         const remaining = state.profiles.filter((profile) => profile.profileId !== profileId);
         const nextActive = state.activeProfileId === profileId ? remaining[0]?.profileId ?? null : state.activeProfileId;
         await currentStore.deleteProfile(profileId, nextActive);
-        setState({ profiles: remaining, activeProfileId: nextActive });
+        setState((previous) => ({ ...previous, profiles: remaining, activeProfileId: nextActive }));
         return true;
       } catch (error) {
         setLastError(error instanceof Error ? error.message : "Не удалось удалить профиль");
@@ -177,6 +179,7 @@ export function TariffProfilesProvider({ children }: { children: React.ReactNode
     allProfiles,
     activeProfileId: isTemplateProfile(activeProfile) && state.activeProfileId === null ? null : activeProfile.profileId,
     activeProfile,
+    rejectedProfiles: state.rejectedProfiles,
     lastError,
     clearError: () => setLastError(null),
     getProfile,

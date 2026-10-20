@@ -21,9 +21,19 @@ export const PROFILES_STORE = "profiles";
 export const META_STORE = "meta";
 export const ACTIVE_PROFILE_META_KEY = "activeProfileId";
 
+export interface RejectedProfileRecord {
+  /** IndexedDB primary key, not raw user content. */
+  key: string;
+  /** Safe, data-free validation summary for diagnostics. */
+  reason: string;
+  /** Kept only in memory until an explicit local recovery export. */
+  raw: unknown;
+}
+
 export interface ProfileStoreState {
   profiles: TariffProfile[];
   activeProfileId: string | null;
+  rejectedProfiles: RejectedProfileRecord[];
 }
 
 export interface ProfileStore {
@@ -117,23 +127,40 @@ export function createIndexedDbStore(): ProfileStore {
   async function load(): Promise<ProfileStoreState> {
     const database = await db();
     const transaction = database.transaction([PROFILES_STORE, META_STORE], "readonly");
-    const rawProfiles = await requestToPromise<unknown[]>(
-      transaction.objectStore(PROFILES_STORE).getAll(),
-    );
-    const rawActive = await requestToPromise<unknown>(
-      transaction.objectStore(META_STORE).get(ACTIVE_PROFILE_META_KEY),
-    );
+    const profileStore = transaction.objectStore(PROFILES_STORE);
+    const [rawProfiles, profileKeys, rawActive] = await Promise.all([
+      requestToPromise<unknown[]>(profileStore.getAll()),
+      requestToPromise<IDBValidKey[]>(profileStore.getAllKeys()),
+      requestToPromise<unknown>(transaction.objectStore(META_STORE).get(ACTIVE_PROFILE_META_KEY)),
+    ]);
     await transactionDone(transaction);
 
     const profiles: TariffProfile[] = [];
-    for (const raw of rawProfiles ?? []) {
+    const rejectedProfiles: RejectedProfileRecord[] = [];
+    for (let index = 0; index < (rawProfiles ?? []).length; index += 1) {
+      const raw = rawProfiles[index];
+      const key = String(profileKeys[index] ?? `record-${index + 1}`);
       try {
         const profile = parseTariffProfile(raw);
-        // The template is code-owned; a stored copy with its id is ignored.
-        if (!isTemplateProfile(profile)) profiles.push(profile);
-      } catch {
-        // Unreadable records are skipped instead of silently replacing data.
-        console.warn("Skipped unreadable stored tariff profile");
+        if (isTemplateProfile(profile)) {
+          rejectedProfiles.push({
+            key,
+            reason: "Запись пытается подменить защищённый шаблон",
+            raw,
+          });
+        } else {
+          profiles.push(profile);
+        }
+      } catch (error) {
+        const fieldErrors = (error as { details?: { fieldErrors?: Record<string, unknown> } })?.details?.fieldErrors;
+        const fields = fieldErrors ? Object.keys(fieldErrors).slice(0, 5) : [];
+        rejectedProfiles.push({
+          key,
+          reason: fields.length
+            ? `Не пройдена проверка полей: ${fields.join(", ")}`
+            : "Запись не прошла проверку схемы профиля",
+          raw,
+        });
       }
     }
     profiles.sort((a, b) => a.name.localeCompare(b.name, "ru"));
@@ -144,7 +171,7 @@ export function createIndexedDbStore(): ProfileStore {
         ? rawActive
         : profiles[0]?.profileId ?? null;
 
-    return { profiles, activeProfileId };
+    return { profiles, activeProfileId, rejectedProfiles };
   }
 
   async function saveProfile(profile: TariffProfile, activeProfileId?: string | null): Promise<void> {
@@ -215,6 +242,7 @@ export function createMemoryStore(initial?: Partial<ProfileStoreState>): Profile
       return {
         profiles: Array.from(profiles.values()).sort((a, b) => a.name.localeCompare(b.name, "ru")),
         activeProfileId: active,
+        rejectedProfiles: [],
       };
     },
     async saveProfile(profile, activeProfileId) {
