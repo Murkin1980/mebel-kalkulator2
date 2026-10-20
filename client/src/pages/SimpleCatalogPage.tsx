@@ -25,7 +25,7 @@ function Editor() {
   const start = (item?: Tariff | ExtraItem) => {
     setEditing(item ? ("extraId" in item ? item.extraId : item.tariffId) : "new");
     setName(item?.label ?? ""); setPrice(item?.priceKzt === null || !item ? "" : String(item.priceKzt));
-    setUnit(item?.method === "AREA" ? "AREA" : item?.method === "LINEAR" ? "LINEAR" : "UNIT");
+    setUnit(item?.method === "AREA" ? "AREA" : item?.method === "LINEAR" ? "LINEAR" : section === "facade" ? "AREA" : "UNIT");
     setSaved("");
   };
   async function updateProfile(transform: (profile: TariffProfile) => TariffProfile) {
@@ -48,7 +48,7 @@ function Editor() {
     const numericPrice = price.trim() === "" ? null : Number(price);
     if (!name.trim() || name.length > 160 || (numericPrice !== null && (!Number.isFinite(numericPrice) || numericPrice < 0))) { setSaved("Проверьте название и цену."); return; }
     void updateProfile(profile => {
-      const method = section === "hardware" ? "UNIT" : unit;
+      const method = section === "hardware" ? "UNIT" : section === "facade" ? "AREA" : unit;
       const fields = { label: name.trim(), method, unit: method === "AREA" ? "KZT_PER_M2" : method === "LINEAR" ? "KZT_PER_LINEAR_M" : "KZT_PER_UNIT", priceKzt: numericPrice, isConfirmed: numericPrice !== null, includesServices: [] as string[], source: "User-edited CP-03" };
       if (section === "hardware") {
         const entry = { ...fields, extraId: editing === "new" ? makeId("cp03-hardware") : editing!, notes: "Только явно выбранная дополнительная фурнитура" } as ExtraItem;
@@ -81,7 +81,7 @@ function Editor() {
       <label className="block text-sm">Название<input aria-label="Название позиции" className={input} maxLength={160} value={name} onChange={e => setName(e.target.value)} /></label>
       <label className="block text-sm">Стоимость, ₸<input aria-label="Цена позиции" className={input} type="number" min="0" value={price} onChange={e => setPrice(e.target.value)} placeholder="Не установлена" /></label>
       {section !== "hardware" && <label className="block text-sm">Расчёт<select aria-label="Способ расчёта" className={input} value={unit} onChange={e => setUnit(e.target.value as typeof unit)}>
-        <option value="AREA">За м²</option><option value="LINEAR">За погонный метр</option>{section === "stone" && <option value="UNIT">За штуку</option>}
+        <option value="AREA">За м²</option>{section === "stone" && <option value="LINEAR">За погонный метр</option>}{section === "stone" && <option value="UNIT">За штуку</option>}
       </select></label>}
       <div className="flex gap-2"><button disabled={busy} className="salamat-primary min-h-11 flex-1 rounded-lg" onClick={saveItem}>Сохранить</button><button className="min-h-11 flex-1 rounded-lg border" onClick={() => setEditing(null)}>Отмена</button></div>
     </div>}
