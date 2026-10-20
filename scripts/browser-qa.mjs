@@ -103,6 +103,39 @@ try {
         await page.screenshot({ path: out + "/cp03-hardware-375.png", fullPage: true });
       });
     }
+    if (width === 375) {
+      await check("cp03-stone-facade-estimates", async () => {
+        async function addCatalog(tab, label, price, method) {
+          await page.goto(base + "/#/simple/catalog");
+          await page.getByTestId("cp03-catalog").waitFor();
+          await page.getByRole("button", {name: tab, exact: true}).click();
+          await page.getByRole("button", {name: /Добавить/}).last().click();
+          await page.getByLabel("Название позиции").fill(label);
+          await page.getByLabel("Цена позиции").fill(String(price));
+          if (method) await page.getByLabel("Способ расчёта").selectOption(method);
+          await page.getByRole("button", {name: "Сохранить", exact: true}).click();
+          await page.getByText(label).first().waitFor();
+        }
+        await addCatalog("Искусственный камень", "QA камень погонный", 120000, "LINEAR");
+        await page.goto(base + "/#/simple");
+        await page.getByTestId("simple-calculator").waitFor();
+        await page.getByTestId("calc-material").selectOption("kitchen-ldsp-egger");
+        await page.getByText("Искусственный камень (дополнительно)").click();
+        await page.locator("select").last().selectOption({label: "QA камень погонный — пог. м"});
+        assert.match(await page.getByTestId("calc-total").innerText(), /975\\s*000/, "stone must be separately added at 3 m");
+        await addCatalog("Фасады", "QA стандартный", 20000, "AREA");
+        await addCatalog("Фасады", "QA премиум", 50000, "AREA");
+        await page.goto(base + "/#/simple");
+        await page.getByTestId("simple-calculator").waitFor();
+        await page.getByTestId("calc-material").selectOption("kitchen-ldsp-egger");
+        await page.getByText("Премиальные фасады (доплата)").click();
+        await page.getByText("Стандартные фасады").locator("..").locator("select").selectOption({label: "QA стандартный"});
+        await page.getByText("Премиальные фасады").locator("..").locator("select").selectOption({label: "QA премиум"});
+        await page.getByText("Площадь фасадов, м²").locator("..").locator("input").fill("4");
+        assert.match(await page.getByTestId("calc-total").innerText(), /735\\s*000/, "facade price must be only upgrade difference");
+        await page.screenshot({path: out + "/cp03-facades-375.png", fullPage: true});
+      });
+    }
     await context.close();
   }
 } finally {
