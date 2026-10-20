@@ -261,7 +261,7 @@ function TariffProfilesPageInner() {
           <p className="text-xs text-muted-foreground">
             Защищён от изменений. Чтобы менять цены, создайте копию — правки применяются только к ней.
           </p>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 min-[380px]:grid-cols-2 gap-2">
             <Button variant="outline" className="min-h-11" onClick={() => navigate("/tariffs/salamat-mebel")} data-testid="open-template">
               Открыть
             </Button>

@@ -206,14 +206,18 @@ export function TariffForm({ value, categories, includedServices, onChange, erro
           </p>
           <div className="space-y-1">
             {includedServices.map((service) => (
-              <div key={service.serviceId} className="flex items-center gap-3 min-h-11">
+              <div key={service.serviceId} className="flex items-center gap-3">
                 <Checkbox
                   id={`${testIdPrefix}-service-${service.serviceId}`}
                   checked={value.includesServices.includes(service.serviceId)}
                   onCheckedChange={(checked) => toggleService(service.serviceId, checked === true)}
                   data-testid={`${testIdPrefix}-service-${service.serviceId}`}
                 />
-                <label htmlFor={`${testIdPrefix}-service-${service.serviceId}`} className="text-sm cursor-pointer">
+                {/* The label fills the 44px row so the whole row is a touch target. */}
+                <label
+                  htmlFor={`${testIdPrefix}-service-${service.serviceId}`}
+                  className="flex min-h-11 flex-1 cursor-pointer items-center text-sm"
+                >
                   {service.label}
                 </label>
               </div>
