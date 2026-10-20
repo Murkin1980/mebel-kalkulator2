@@ -94,8 +94,8 @@ function installHashNavigationGuard(): () => void {
     if (nextRoute === lastRoute) return;
 
     if (!navigationGuard.canNavigate()) {
-      // Capture phase prevents Wouter from unmounting the editor before the
-      // cancelled history traversal has been reversed.
+      // First-listener position prevents Wouter from unmounting the editor
+      // before the cancelled history traversal has been reversed.
       event.stopImmediatePropagation();
       const delta = nextIndex === null ? 0 : lastIndex - nextIndex;
       if (delta !== 0) {
@@ -121,6 +121,17 @@ function installHashNavigationGuard(): () => void {
     window.removeEventListener("hashchange", onHashChange, true);
     hashListenerInstalled = false;
   };
+}
+
+// Browser Back/Forward must be vetoed before Wouter reacts to the same
+// `hashchange`. Wouter's hash-location subscriber attaches on first React
+// render, and handlers on `window` run in registration order — a listener
+// registered later cannot preempt it (capture phase does not matter when the
+// event target is `window` itself). Installing at module load guarantees the
+// guard is the first hashchange listener, so a rejected traversal can call
+// stopImmediatePropagation() before Wouter unmounts the editor.
+if (typeof window !== "undefined") {
+  installHashNavigationGuard();
 }
 
 /** Wouter-compatible hash hook that guards Link, navigate, Back and Forward. */
