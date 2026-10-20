@@ -14,6 +14,7 @@ import Layout from "@/components/Layout";
 const TariffProfilesPage = lazy(() => import("@/pages/TariffProfilesPage"));
 const TariffEditorPage = lazy(() => import("@/pages/TariffEditorPage"));
 const SimpleCalculatorPage = lazy(() => import("@/pages/SimpleCalculatorPage"));
+const SimpleCatalogPage = lazy(() => import("@/pages/SimpleCatalogPage"));
 
 export default function App() {
   return (
@@ -24,6 +25,9 @@ export default function App() {
             <Route path="/" component={CalculatorPage} />
             <Route path="/admin" component={AdminPage} />
             <Route path="/leads" component={LeadsPage} />
+            <Route path="/simple/catalog">
+              <Suspense fallback={<p>Загрузка…</p>}><SimpleCatalogPage /></Suspense>
+            </Route>
             <Route path="/simple">
               <Suspense fallback={<p className="text-sm text-muted-foreground">Загрузка…</p>}>
                 <SimpleCalculatorPage />
