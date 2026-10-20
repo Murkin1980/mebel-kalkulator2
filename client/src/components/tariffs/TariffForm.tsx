@@ -213,7 +213,10 @@ export function TariffForm({ value, categories, includedServices, onChange, erro
                   onCheckedChange={(checked) => toggleService(service.serviceId, checked === true)}
                   data-testid={`${testIdPrefix}-service-${service.serviceId}`}
                 />
-                <label htmlFor={`${testIdPrefix}-service-${service.serviceId}`} className="text-sm cursor-pointer">
+                <label
+                  htmlFor={`${testIdPrefix}-service-${service.serviceId}`}
+                  className="flex min-h-11 flex-1 items-center text-sm cursor-pointer"
+                >
                   {service.label}
                 </label>
               </div>
