@@ -62,8 +62,8 @@ function stateWithRouteIndex(state: unknown, index: number): Record<string, unkn
 let hashListenerInstalled = false;
 let approvedRoute: string | null = null;
 
-function installHashNavigationGuard(): () => void {
-  if (typeof window === "undefined") return () => undefined;
+function installHashNavigationGuard(): void {
+  if (typeof window === "undefined" || hashListenerInstalled) return;
 
   let lastRoute = routeFromHash();
   let lastIndex = routeIndex(window.history.state) ?? 0;
@@ -117,20 +117,18 @@ function installHashNavigationGuard(): () => void {
 
   window.addEventListener("hashchange", onHashChange, true);
   hashListenerInstalled = true;
-  return () => {
-    window.removeEventListener("hashchange", onHashChange, true);
-    hashListenerInstalled = false;
-  };
 }
+
+// Installed at module load, before React mounts Wouter. The guard and Wouter's
+// `useHashLocation` both listen for `hashchange` on `window`, and at that target
+// listeners run in registration order (the capture flag does not reorder them).
+// A guard installed from an effect would run after Wouter had already
+// re-rendered the route and unmounted the editor on Browser Back/Forward.
+if (typeof window !== "undefined") installHashNavigationGuard();
 
 /** Wouter-compatible hash hook that guards Link, navigate, Back and Forward. */
 export function useGuardedHashLocation(options?: { ssrPath?: Path }): ReturnType<typeof useHashLocation> {
   const [location, navigate] = useHashLocation(options);
-
-  useEffect(() => {
-    if (hashListenerInstalled) return;
-    return installHashNavigationGuard();
-  }, []);
 
   const guardedNavigate = useCallback<typeof navigate>((to, options) => {
     const target = `/${to.replace(/^#?\/?/, "")}`;
