@@ -1,10 +1,10 @@
 # DEV-CP-02A — SALAMAT CALC Stabilization & Mobile QA
 
-RESULT: **PARTIAL**  
-Дата: 2026-10-20  
-MPE decision: `EXTEND_EXISTING`  
-Режим: CORRECTIVE / MINIMAL DIFF  
-Merge: **не выполнялся**  
+RESULT: **PARTIAL**
+Дата: 2026-10-20
+MPE decision: `EXTEND_EXISTING`
+Режим: CORRECTIVE / MINIMAL DIFF
+Merge: **не выполнялся**
 Deploy: **не выполнялся**
 
 ## 1. Идентификация и baseline
@@ -121,7 +121,7 @@ SQLite и действующий API не менялись.
 
 ## 5. Mobile QA и Browser Storage QA
 
-**BROWSER_STORAGE_QA: NOT VERIFIED**  
+**BROWSER_STORAGE_QA: NOT VERIFIED**
 **MOBILE QA: NOT VERIFIED**
 
 В контейнере отсутствуют исполняемые Chromium/Chrome/Firefox (`which chromium chromium-browser
