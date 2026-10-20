@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Calculator, Settings, ClipboardList, Sun, Moon } from "lucide-react";
+import { Calculator, Settings, ClipboardList, Sun, Moon, Tags } from "lucide-react";
 import { useState, useEffect } from "react";
 import PerplexityAttribution from "./PerplexityAttribution";
 
@@ -51,6 +51,7 @@ function Logo() {
 
 const navItems = [
   { href: "/", label: "Калькулятор", icon: Calculator },
+  { href: "/tariffs", label: "Тарифы", icon: Tags },
   { href: "/leads", label: "Заявки", icon: ClipboardList },
   { href: "/admin", label: "Настройки", icon: Settings },
 ];
@@ -65,7 +66,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 text-primary">
             <Logo />
-            <div className="leading-tight">
+            <div className="leading-tight hidden min-[480px]:block">
               <div
                 className="font-bold text-sm text-foreground"
                 style={{ fontFamily: "var(--font-display)" }}
@@ -76,9 +77,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </div>
           </div>
 
-          <nav className="flex items-center gap-1">
+          <nav className="flex items-center gap-0.5 sm:gap-1">
             {navItems.map(({ href, label, icon: Icon }) => {
-              const active = location === href;
+              const active = href === "/" ? location === "/" : location === href || location.startsWith(`${href}/`);
               return (
                 <Link key={href} href={href}>
                   <a

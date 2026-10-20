@@ -1,0 +1,66 @@
+name: Salamat Calc Browser QA
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - arena/8e093f08-mebel-kalkulator2
+    paths:
+      - ".github/workflows/browser-qa.yml"
+      - "scripts/browser-qa.mjs"
+      - "client/**"
+      - "shared/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: browser-qa-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  mobile-browser-qa:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install project dependencies
+        run: npm ci
+      - name: Regression tests
+        run: |
+          npm test
+          npm run check
+          npm run build
+      - name: Install QA-only Playwright
+        run: |
+          npm install --no-save --package-lock=false playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Start local dev server
+        run: |
+          PORT=5000 npm run dev > /tmp/salamat-calc-server.log 2>&1 &
+          echo $! > /tmp/salamat-calc-server.pid
+          for i in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:5000/ >/dev/null; then exit 0; fi
+            sleep 2
+          done
+          cat /tmp/salamat-calc-server.log
+          exit 1
+      - name: Chromium mobile and IndexedDB QA
+        timeout-minutes: 7
+        env:
+          QA_BASE_URL: http://127.0.0.1:5000
+        run: node scripts/browser-qa.mjs
+      - name: Upload QA screenshots and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: salamat-calc-browser-qa-${{ github.run_number }}
+          path: |
+            evidence/dev-cp-02a/browser/
+            /tmp/salamat-calc-server.log
+          if-no-files-found: warn
+          retention-days: 14
