@@ -82,6 +82,27 @@ try {
       await page.screenshot({ path: out + "/cp03-catalog-" + width + ".png", fullPage: true });
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth), false, "CP-03 catalog horizontal overflow");
     });
+    if (width === 375) {
+      await check("cp03-catalog-indexeddb", async () => {
+        await page.getByRole("button", {name: /Добавить фурнитуру/}).click();
+        await page.getByLabel("Название позиции").fill("QA Тандем");
+        await page.getByLabel("Цена позиции").fill("25000");
+        await page.getByRole("button", {name: "Сохранить"}).click();
+        await page.getByText("QA Тандем").waitFor();
+        await page.reload();
+        await page.getByText("QA Тандем").waitFor();
+        const name = await page.getByText("QA Тандем").first().innerText();
+        assert.equal(name, "QA Тандем");
+        await page.goto(base + "/#/simple");
+        await page.getByTestId("simple-calculator").waitFor();
+        await page.getByText("Дополнительная фурнитура").click();
+        await page.getByLabel("Количество QA Тандем").fill("2");
+        await page.getByTestId("calc-material").selectOption("kitchen-ldsp-egger");
+        await page.getByTestId("calc-total").waitFor();
+        assert.match(await page.getByTestId("calc-total").innerText(), /665\\s*000/);
+        await page.screenshot({ path: out + "/cp03-hardware-375.png", fullPage: true });
+      });
+    }
     await context.close();
   }
 } finally {
