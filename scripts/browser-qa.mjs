@@ -71,7 +71,7 @@ try {
       await page.getByTestId("calc-material").selectOption("kitchen-ldsp-egger");
       await page.getByTestId("calc-width").fill("3000");
       await page.getByTestId("calc-total").waitFor();
-      assert.match(await page.getByTestId("calc-total").innerText(), /615\\s*000/);
+      assert.match(await page.getByTestId("calc-total").innerText(), /615\s*000/);
       assert.equal(await page.locator('input[type="checkbox"]:checked').count(), 0, "optional extras must be disabled by default");
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth), false, "CP-03 horizontal overflow");
       await page.screenshot({ path: out + "/cp03-simple-" + width + ".png", fullPage: true });
@@ -99,7 +99,7 @@ try {
         await page.getByLabel("Количество QA Тандем").fill("2");
         await page.getByTestId("calc-material").selectOption("kitchen-ldsp-egger");
         await page.getByTestId("calc-total").waitFor();
-        assert.match(await page.getByTestId("calc-total").innerText(), /665\\s*000/);
+        assert.match(await page.getByTestId("calc-total").innerText(), /665\s*000/);
         await page.screenshot({ path: out + "/cp03-hardware-375.png", fullPage: true });
       });
     }
@@ -122,7 +122,7 @@ try {
         await page.getByTestId("calc-material").selectOption("kitchen-ldsp-egger");
         await page.getByText("Искусственный камень (дополнительно)").click();
         await page.locator("select").last().selectOption({label: "QA камень погонный — пог. м"});
-        assert.match(await page.getByTestId("calc-total").innerText(), /975\\s*000/, "stone must be separately added at 3 m");
+        assert.match(await page.getByTestId("calc-total").innerText(), /975\s*000/, "stone must be separately added at 3 m");
         await addCatalog("Фасады", "QA стандартный", 20000, "AREA");
         await addCatalog("Фасады", "QA премиум", 50000, "AREA");
         await page.goto(base + "/#/simple");
@@ -132,7 +132,7 @@ try {
         await page.getByText("Стандартные фасады").locator("..").locator("select").selectOption({label: "QA стандартный"});
         await page.getByText("Премиальные фасады").locator("..").locator("select").selectOption({label: "QA премиум"});
         await page.getByText("Площадь фасадов, м²").locator("..").locator("input").fill("4");
-        assert.match(await page.getByTestId("calc-total").innerText(), /735\\s*000/, "facade price must be only upgrade difference");
+        assert.match(await page.getByTestId("calc-total").innerText(), /735\s*000/, "facade price must be only upgrade difference");
         await page.screenshot({path: out + "/cp03-facades-375.png", fullPage: true});
       });
     }
