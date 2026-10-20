@@ -65,6 +65,23 @@ try {
         await page.screenshot({ path: out + "/navigation-375.png" });
       });
     }
+    await check("cp03-simple-calculator-" + width, async () => {
+      await page.goto(base + "/#/simple");
+      await page.getByTestId("simple-calculator").waitFor();
+      await page.getByTestId("calc-material").selectOption("kitchen-ldsp-egger");
+      await page.getByTestId("calc-width").fill("3000");
+      await page.getByTestId("calc-total").waitFor();
+      assert.match(await page.getByTestId("calc-total").innerText(), /615\\s*000/);
+      assert.equal(await page.locator('input[type="checkbox"]:checked').count(), 0, "optional extras must be disabled by default");
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth), false, "CP-03 horizontal overflow");
+      await page.screenshot({ path: out + "/cp03-simple-" + width + ".png", fullPage: true });
+    });
+    await check("cp03-catalog-" + width, async () => {
+      await page.goto(base + "/#/simple/catalog");
+      await page.getByTestId("cp03-catalog").waitFor();
+      await page.screenshot({ path: out + "/cp03-catalog-" + width + ".png", fullPage: true });
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth), false, "CP-03 catalog horizontal overflow");
+    });
     await context.close();
   }
 } finally {
