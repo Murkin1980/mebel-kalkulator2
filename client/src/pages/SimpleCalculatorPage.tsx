@@ -1,75 +1,119 @@
 import "./salamat-calc.css";
 import { useMemo, useState } from "react";
 import { Link } from "wouter";
-import { calculatePrice, type TariffProfile, type Tariff } from "@shared/pricing";
+import { calculatePrice, type Tariff, type TariffProfile } from "@shared/pricing";
 import { useTariffProfiles, withTariffProfiles } from "@/components/tariffs/TariffProfilesProvider";
 
 const money = (n: number) => new Intl.NumberFormat("ru-RU", { maximumFractionDigits: 2 }).format(n) + " ₸";
-const positive = (s: string) => { const n = Number(s); return Number.isFinite(n) && n > 0 ? n : null; };
-
+const valid = (s: string) => { const n = Number(s); return s.trim() !== "" && Number.isFinite(n) && n > 0 ? n : null; };
+type EstimateLine = { name: string; amount: number };
 function SimpleCalculatorInner() {
   const { activeProfile, status, storageMessage } = useTariffProfiles();
   const [kind, setKind] = useState<"kitchen" | "wardrobe">("kitchen");
   const [width, setWidth] = useState("3000");
   const [height, setHeight] = useState("2500");
-  const available = useMemo(() => activeProfile.tariffs.filter(t => t.categoryId === kind), [activeProfile, kind]);
   const [choice, setChoice] = useState("");
-  const selected = available.find(t => t.tariffId === choice) ?? available[0];
-  const [includeExtras, setIncludeExtras] = useState(false);
-  const [quantities, setQuantities] = useState<Record<string, number>>({});
+  const [showHardware, setShowHardware] = useState(false);
+  const [hardwareQty, setHardwareQty] = useState<Record<string, number>>({});
+  const [showStone, setShowStone] = useState(false);
+  const [stoneId, setStoneId] = useState("");
+  const [stoneLength, setStoneLength] = useState("3000");
+  const [stoneWidth, setStoneWidth] = useState("600");
+  const [showFacade, setShowFacade] = useState(false);
+  const [standardId, setStandardId] = useState("");
+  const [premiumId, setPremiumId] = useState("");
+  const [facadeArea, setFacadeArea] = useState("");
   const [copyStatus, setCopyStatus] = useState("");
+  const baseTariffs = activeProfile.tariffs.filter(x => x.categoryId === kind);
+  const selected = baseTariffs.find(x => x.tariffId === choice) ?? baseTariffs[0];
+  const hardware = activeProfile.extras.filter(x => x.extraId.startsWith("cp03-hardware-"));
+  const stones = activeProfile.tariffs.filter(x => x.categoryId === "artificial-stone" && x.tariffId.startsWith("cp03-stone-"));
+  const facades = activeProfile.tariffs.filter(x => x.categoryId === "premium-facades" && x.tariffId.startsWith("cp03-facade-") && x.method === "AREA");
+  const stone = stones.find(x => x.tariffId === stoneId);
+  const standard = facades.find(x => x.tariffId === standardId);
+  const premium = facades.find(x => x.tariffId === premiumId);
   const estimate = useMemo(() => {
-    if (!selected) return { error: "Добавьте тариф для выбранной мебели в разделе «Мои цены»." } as const;
-    if (!positive(width) || (selected.method === "AREA" && !positive(height))) return { error: "Укажите корректные размеры." } as const;
+    const w = valid(width), h = valid(height);
+    if (status === "loading") return { error: "Загрузка тарифов…" };
+    if (!selected) return { error: "Тариф не найден. Добавьте его в «Мои цены»." };
+    if (!w || (selected.method === "AREA" && !h)) return { error: "Введите корректные размеры мебели." };
     try {
-      const extras = includeExtras ? activeProfile.extras.filter(x => (quantities[x.extraId] ?? 0) > 0).map(x => ({ extraId: x.extraId, quantity: quantities[x.extraId], dimensionsMm: { lengthMm: Number(width), widthMm: Number(width), heightMm: Number(height) } })) : [];
-      return { result: calculatePrice(activeProfile as TariffProfile, {
-        tariffId: selected.tariffId,
-        dimensionsMm: { lengthMm: Number(width), widthMm: Number(width), heightMm: Number(height) },
-        extras,
-      }) } as const;
-    } catch (error) {
-      return { error: error instanceof Error ? error.message : "Не удалось выполнить расчёт." } as const;
-    }
-  }, [activeProfile, selected, width, height, includeExtras, quantities]);
-  const total = "result" in estimate ? estimate.result : null;
+      const base = calculatePrice(activeProfile as TariffProfile, { tariffId: selected.tariffId, dimensionsMm: { lengthMm: w, widthMm: w, ...(h ? {heightMm: h} : {}) } });
+      const lines: EstimateLine[] = base.lines.map(x => ({ name: x.label, amount: x.amountKzt }));
+      if (showHardware) for (const item of hardware) {
+        const qty = hardwareQty[item.extraId] ?? 0;
+        if (qty <= 0) continue;
+        if (!Number.isInteger(qty) || qty > 9999) return { error: "Укажите допустимое количество фурнитуры." };
+        if (!item.isConfirmed || item.priceKzt === null) return { error: "Не задана цена фурнитуры: " + item.label };
+        lines.push({ name: `${item.label} × ${qty}`, amount: Math.round(item.priceKzt * qty * 100) / 100 });
+      }
+      if (showFacade) {
+        if (selected.tariffId === "kitchen-mdf-film" || selected.tariffId === "kitchen-mdf-paint") return { error: "Для доплаты за фасады выберите базовый тариф со стандартными фасадами, чтобы не начислять их дважды." };
+        if (!standard || !premium || !valid(facadeArea)) return { error: "Для фасадов выберите стандартный и премиальный тарифы и укажите площадь, м²." };
+        if (!standard.isConfirmed || !premium.isConfirmed || standard.priceKzt === null || premium.priceKzt === null) return { error: "Заполните обе цены фасадов в справочнике." };
+        if (premium.priceKzt < standard.priceKzt) return { error: "Премиальный фасад дешевле стандартного. Проверьте выбор: скидка требует отдельного согласования." };
+        const extra = Math.round(valid(facadeArea)! * (premium.priceKzt - standard.priceKzt) * 100) / 100;
+        lines.push({ name: `Доплата за ${premium.label}, ${facadeArea} м² (разница со стандартным)`, amount: extra });
+      }
+      if (showStone) {
+        if (!stone || !stone.isConfirmed || stone.priceKzt === null) return { error: "Выберите искусственный камень с установленной ценой." };
+        const length = valid(stoneLength), stoneW = valid(stoneWidth);
+        if (stone.method === "LINEAR" && !length) return { error: "Укажите длину столешницы." };
+        if (stone.method === "AREA" && (!length || !stoneW)) return { error: "Укажите длину и ширину столешницы." };
+        const measure = stone.method === "LINEAR" ? length! / 1000 : stone.method === "AREA" ? length! * stoneW! / 1e6 : 1;
+        lines.push({ name: `${stone.label} (${measure.toLocaleString("ru-RU")} ${stone.method === "LINEAR" ? "пог. м" : stone.method === "AREA" ? "м²" : "шт."})`, amount: Math.round(measure * stone.priceKzt * 100) / 100 });
+      }
+      return { lines, total: Math.round(lines.reduce((sum, x) => sum + x.amount, 0) * 100) / 100 };
+    } catch(e) { return { error: e instanceof Error ? e.message : "Невозможно рассчитать смету" }; }
+  }, [activeProfile, status, selected, width, height, showHardware, hardwareQty, showStone, stone, stoneLength, stoneWidth, showFacade, standard, premium, facadeArea]);
+  const input = "min-h-11 w-full rounded-lg border px-3 text-base";
   const copy = async () => {
-    if (!total) return;
-    const lines = [`Смета: ${selected?.label ?? ""}`, `Ширина: ${width} мм`, ...(kind === "wardrobe" ? [`Высота: ${height} мм`] : []), ...total.lines.map(l => `${l.label}: ${money(l.amountKzt)}`), `Итого: ${money(total.totalKzt)}`];
-    try { await navigator.clipboard.writeText(lines.join("\n")); setCopyStatus("Смета скопирована"); }
-    catch { setCopyStatus("Не удалось скопировать. Проверьте разрешение браузера."); }
+    if (!estimate.lines || estimate.total === undefined) return;
+    const quote = [`Смета — ${selected.label}`, `Размеры: ${width} × ${height} мм`, ...estimate.lines.map(x => x.name + ": " + money(x.amount)), "Итого: " + money(estimate.total), `Тарифный профиль: ${activeProfile.name}, версия ${activeProfile.version}`].join("\n");
+    try { await navigator.clipboard.writeText(quote); setCopyStatus("Смета скопирована"); } catch { setCopyStatus("Копирование недоступно в браузере"); }
   };
-  const inputStyle = "w-full min-h-11 rounded-lg border border-input bg-background px-3 text-base";
-  return <div className="salamat-calc mx-auto max-w-xl space-y-5 pb-12" data-testid="simple-calculator">
-    <div><h1 className="text-2xl font-bold">Расчёт мебели</h1><p className="text-sm salamat-muted">Размеры → материал → стоимость</p></div>
-    {storageMessage && <p role="alert" className="rounded-lg bg-amber-50 p-3 text-sm text-amber-900">{storageMessage}</p>}
-    <div className="grid grid-cols-2 gap-2" role="group" aria-label="Вид мебели">
-      {(["kitchen", "wardrobe"] as const).map(k => <button key={k} type="button" aria-pressed={kind === k} className="salamat-choice min-h-11 rounded-lg border px-3 font-medium" onClick={() => { setKind(k); setChoice(""); setQuantities({}); }}>{k === "kitchen" ? "Кухня" : "Шкаф"}</button>)}
-    </div>
+  return <div className="salamat-calc mx-auto max-w-xl space-y-4 pb-8" data-testid="simple-calculator">
+    <h1 className="text-2xl font-bold">Расчёт мебели</h1><p className="salamat-muted text-sm">Укажите размеры — получите стоимость и смету.</p>
+    {storageMessage && <p role="alert" className="salamat-panel p-2 text-sm">{storageMessage}</p>}
+    <div className="grid grid-cols-2 gap-2">{(["kitchen","wardrobe"] as const).map(k => <button type="button" className="salamat-choice min-h-11 rounded-lg border" key={k} aria-pressed={kind === k} onClick={() => { setKind(k); setChoice(""); setShowFacade(false); }}>{k === "kitchen" ? "Кухня" : "Шкаф"}</button>)}</div>
     <div className="grid grid-cols-2 gap-3">
-      <label className="space-y-1 text-sm font-medium">Ширина, мм<input data-testid="calc-width" className={inputStyle} type="number" min="1" inputMode="decimal" value={width} onChange={e => setWidth(e.target.value)} /></label>
-      <label className="space-y-1 text-sm font-medium">Высота, мм<input data-testid="calc-height" className={inputStyle} type="number" min="1" inputMode="decimal" value={height} onChange={e => setHeight(e.target.value)} disabled={selected?.method === "LINEAR"} /></label>
+      <label className="text-sm">Ширина, мм<input data-testid="calc-width" className={input} type="number" min="1" value={width} onChange={e => setWidth(e.target.value)} /></label>
+      <label className="text-sm">Высота, мм<input data-testid="calc-height" className={input} type="number" min="1" value={height} disabled={selected?.method === "LINEAR"} onChange={e => setHeight(e.target.value)} /></label>
     </div>
-    <label className="block space-y-1 text-sm font-medium">Материал / базовый тариф
-      <select data-testid="calc-material" className={inputStyle} value={selected?.tariffId ?? ""} onChange={e => setChoice(e.target.value)}>
-        {available.length === 0 && <option value="">Нет тарифов</option>}
-        {available.map((t: Tariff) => <option key={t.tariffId} value={t.tariffId}>{t.label}{t.isConfirmed ? "" : " — цена не задана"}</option>)}
+    <label className="block text-sm">Материал
+      <select data-testid="calc-material" className={input} value={selected?.tariffId ?? ""} onChange={e => { setChoice(e.target.value); setShowFacade(false); }}>
+        {baseTariffs.length === 0 && <option value="">Нет тарифов</option>}
+        {baseTariffs.map((t: Tariff) => <option key={t.tariffId} value={t.tariffId}>{t.label}{!t.isConfirmed ? " — цена не задана" : ""}</option>)}
       </select>
     </label>
-    <p className="text-xs salamat-muted">Кухня включает стандартную столешницу из постформинга, базовую фурнитуру, изготовление и монтаж. Премиальные опции не добавляются автоматически.</p>
-    <section className="salamat-panel space-y-3 p-3">
-      <label className="flex min-h-11 items-center gap-3 text-sm font-medium"><input type="checkbox" checked={includeExtras} onChange={e => setIncludeExtras(e.target.checked)} />Дополнительные позиции</label>
-      {includeExtras && (activeProfile.extras.length ? activeProfile.extras.map(item => <div key={item.extraId} className="flex items-center justify-between gap-2 text-sm">
-        <div className="min-w-0 flex-1"><div className="font-medium">{item.label}</div><div className="salamat-muted">{item.priceKzt === null ? "Цена не задана" : money(item.priceKzt)}</div></div>
-        <input className="min-h-11 w-20 rounded-lg border px-2" aria-label={`Количество: ${item.label}`} type="number" min="0" step="1" value={quantities[item.extraId] ?? 0} onChange={e => setQuantities(p => ({ ...p, [item.extraId]: Math.max(0, Math.floor(Number(e.target.value) || 0)) }))} />
-      </div>) : <p className="text-sm salamat-muted">Пока нет дополнительных позиций. <Link href="/tariffs">Добавить в тарифы</Link>.</p>)}
+    {kind === "kitchen" && <p className="salamat-muted text-xs">Стандартная столешница (постформинг), обычная фурнитура, изготовление и монтаж уже включены.</p>}
+    <section className="salamat-panel space-y-2 p-3">
+      <label className="flex min-h-11 items-center gap-2"><input type="checkbox" checked={showFacade} onChange={e => setShowFacade(e.target.checked)} disabled={kind !== "kitchen"} /> Премиальные фасады (доплата)</label>
+      {showFacade && <div className="space-y-2">
+        <label className="block text-sm">Стандартные фасады<select className={input} value={standardId} onChange={e => setStandardId(e.target.value)}><option value="">Выбрать</option>{facades.map(x => <option key={x.tariffId} value={x.tariffId}>{x.label}</option>)}</select></label>
+        <label className="block text-sm">Премиальные фасады<select className={input} value={premiumId} onChange={e => setPremiumId(e.target.value)}><option value="">Выбрать</option>{facades.map(x => <option key={x.tariffId} value={x.tariffId}>{x.label}</option>)}</select></label>
+        <label className="block text-sm">Площадь фасадов, м²<input className={input} type="number" min="0" step="0.01" value={facadeArea} onChange={e => setFacadeArea(e.target.value)} /></label>
+        <Link href="/simple/catalog">Добавить или изменить тарифы фасадов</Link>
+      </div>}
     </section>
-    <section className="salamat-panel space-y-3 p-4" data-testid="estimate">
-      <h2 className="text-lg font-semibold">Смета</h2>
-      {total ? <><div className="space-y-2">{total.lines.map((l,i) => <div key={i} className="flex justify-between gap-2 text-sm"><span>{l.label}</span><span className="shrink-0 tabular-nums">{money(l.amountKzt)}</span></div>)}</div><div className="flex justify-between border-t pt-3 text-lg font-bold"><span>Итого</span><span data-testid="calc-total" className="tabular-nums">{money(total.totalKzt)}</span></div><button type="button" className="salamat-primary min-h-11 w-full rounded-lg px-4 font-medium" onClick={() => void copy()}>Скопировать смету</button>{copyStatus && <p role="status" className="text-xs">{copyStatus}</p>}</> : <p role="status" className="text-sm text-amber-700">{"error" in estimate ? estimate.error : "Укажите параметры для расчёта."}</p>}
+    <section className="salamat-panel space-y-2 p-3">
+      <label className="flex min-h-11 items-center gap-2"><input type="checkbox" checked={showHardware} onChange={e => setShowHardware(e.target.checked)} /> Дополнительная фурнитура</label>
+      {showHardware && <div className="space-y-2">{hardware.map(x => <div className="flex items-center gap-2" key={x.extraId}><span className="flex-1 text-sm">{x.label} — {x.priceKzt === null ? "без цены" : money(x.priceKzt)}</span><input className="min-h-11 w-20 rounded-lg border px-2" aria-label={"Количество " + x.label} type="number" min="0" max="9999" step="1" value={hardwareQty[x.extraId] ?? 0} onChange={e => setHardwareQty(p => ({...p, [x.extraId]: Number(e.target.value)}))}/></div>)}<Link href="/simple/catalog">Добавить или изменить фурнитуру</Link></div>}
     </section>
-    <Link href="/tariffs" className="block min-h-11 rounded-lg border p-3 text-center text-sm font-medium">Мои цены и дополнительные позиции</Link>
-    <p className="text-xs salamat-muted">Предварительный расчёт. Сумма зависит от выбранного тарифного профиля.</p>
+    <section className="salamat-panel space-y-2 p-3">
+      <label className="flex min-h-11 items-center gap-2"><input type="checkbox" checked={showStone} onChange={e => setShowStone(e.target.checked)} /> Искусственный камень (дополнительно)</label>
+      {showStone && <div className="space-y-2">
+        <label className="block text-sm">Материал<select className={input} value={stoneId} onChange={e => setStoneId(e.target.value)}><option value="">Выбрать</option>{stones.map(x => <option key={x.tariffId} value={x.tariffId}>{x.label} — {x.method === "AREA" ? "м²" : x.method === "LINEAR" ? "пог. м" : "шт."}</option>)}</select></label>
+        {stone?.method !== "UNIT" && <div className="grid grid-cols-2 gap-2"><label className="text-sm">Длина, мм<input className={input} type="number" min="1" value={stoneLength} onChange={e => setStoneLength(e.target.value)} /></label>{stone?.method === "AREA" && <label className="text-sm">Ширина, мм<input className={input} type="number" min="1" value={stoneWidth} onChange={e => setStoneWidth(e.target.value)} /></label>}</div>}
+        <Link href="/simple/catalog">Добавить или изменить искусственный камень</Link>
+      </div>}
+    </section>
+    <section className="salamat-panel space-y-3 p-4" data-testid="estimate"><h2 className="font-semibold">Смета</h2>
+      {estimate.lines && estimate.total !== undefined ? <><div className="space-y-2">{estimate.lines.map((x,i) => <div className="flex justify-between gap-2 text-sm" key={i}><span>{x.name}</span><span className="shrink-0 tabular-nums">{money(x.amount)}</span></div>)}</div>
+        <div className="flex justify-between gap-2 border-t pt-3 text-lg font-bold"><span>Итого</span><span data-testid="calc-total">{money(estimate.total)}</span></div>
+        <button type="button" className="salamat-primary min-h-11 w-full rounded-lg font-medium" onClick={() => void copy()}>Скопировать смету</button>{copyStatus && <p role="status" className="text-xs">{copyStatus}</p>}</> : <p role="status" className="text-sm">{estimate.error}</p>}
+    </section>
+    <Link href="/tariffs" className="block rounded-lg border p-3 text-center">Мои цены / профили</Link>
   </div>;
 }
 export default withTariffProfiles(SimpleCalculatorInner);
