@@ -1,0 +1,2625 @@
+{
+  "startedAt": "2026-10-20T19:13:21.371Z",
+  "baseUrl": "http://127.0.0.1:5000",
+  "browser": {
+    "version": "153.0.8010.0",
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36"
+  },
+  "viewports": {
+    "320px": {
+      "viewport": {
+        "width": 320,
+        "height": 740
+      },
+      "steps": {
+        "profiles-load": {
+          "ok": true
+        },
+        "open-create-dialog": {
+          "ok": true
+        },
+        "create-profile": {
+          "ok": true
+        },
+        "edit-tariff": {
+          "ok": true
+        },
+        "fill-tariff": {
+          "ok": true
+        },
+        "save-profile": {
+          "ok": true
+        },
+        "reload-reopen": {
+          "ok": true
+        },
+        "reopen-from-list": {
+          "ok": true
+        },
+        "dirty-draft": {
+          "ok": true
+        },
+        "native-beforeunload-dialog": {
+          "ok": true,
+          "value": {
+            "dialogInfo": {
+              "type": "beforeunload",
+              "message": ""
+            },
+            "stillOnEditor": true,
+            "stillDirty": true
+          }
+        },
+        "browser-back-stay": {
+          "ok": true,
+          "value": {
+            "dialogInfo": {
+              "type": "confirm",
+              "message": "Есть несохранённые изменения. Выйти без сохранения?"
+            },
+            "url": "http://127.0.0.1:5000/#/tariffs/user-moya-masterskaya",
+            "editorVisible": true,
+            "name": "Моя мастерская QA",
+            "dirty": true
+          }
+        },
+        "browser-back-leave": {
+          "ok": true,
+          "value": {
+            "dialogInfo": {
+              "type": "confirm",
+              "message": "Есть несохранённые изменения. Выйти без сохранения?"
+            },
+            "url": "http://127.0.0.1:5000/#/tariffs"
+          }
+        },
+        "browser-forward": {
+          "ok": true,
+          "value": {
+            "url": "http://127.0.0.1:5000/#/tariffs/user-moya-masterskaya",
+            "name": "Моя мастерская",
+            "dirty": false
+          }
+        },
+        "clean-back": {
+          "ok": true,
+          "value": {
+            "dialog": null,
+            "url": "http://127.0.0.1:5000/#/tariffs/user-moya-masterskaya"
+          }
+        },
+        "seed-corrupt-record": {
+          "ok": true
+        },
+        "export-rejected-records": {
+          "ok": true,
+          "value": {
+            "fileName": "salamat-calc-rejected-profiles-1792523629680.json",
+            "format": "salamat-calc-rejected-profiles-v1",
+            "keys": [
+              "corrupt-qa-record"
+            ],
+            "reason": "Не пройдена проверка полей: version, currency, categories, calculationMethod, tariffs",
+            "rawHasRecord": true,
+            "keysAfterExport": [
+              "corrupt-qa-record",
+              "user-moya-masterskaya"
+            ]
+          }
+        },
+        "template-editor": {
+          "ok": true
+        },
+        "preview-block": {
+          "ok": true
+        }
+      },
+      "audits": {
+        "profiles": {
+          "viewportWidth": 320,
+          "documentClientWidth": 320,
+          "documentScrollWidth": 320,
+          "horizontalOverflowPx": 0,
+          "overflowersCount": 0,
+          "overflowers": [],
+          "clippedFields": [],
+          "clippedControls": [],
+          "clippedControlsCount": 0,
+          "interactiveCount": 6,
+          "smallTargets": [],
+          "smallTargetsCount": 0,
+          "informationalTargets": [
+            {
+              "element": "input[import-file] \"Импорт тарифного профиля из JSON\"",
+              "width": 1,
+              "height": 1,
+              "testId": "import-file",
+              "reason": "visually hidden file input; the Import button opens it"
+            },
+            {
+              "element": "a \"калькулятору\"",
+              "width": 88,
+              "height": 14,
+              "testId": null,
+              "reason": "inline text link inside a paragraph (WCAG inline exception)"
+            }
+          ]
+        },
+        "createDialog": {
+          "viewportWidth": 320,
+          "documentClientWidth": 320,
+          "documentScrollWidth": 320,
+          "horizontalOverflowPx": 0,
+          "overflowersCount": 0,
+          "overflowers": [],
+          "clippedFields": [],
+          "clippedControls": [],
+          "clippedControlsCount": 0,
+          "interactiveCount": 6,
+          "smallTargets": [],
+          "smallTargetsCount": 0,
+          "informationalTargets": [
+            {
+              "element": "input[import-file] \"Импорт тарифного профиля из JSON\"",
+              "width": 1,
+              "height": 1,
+              "testId": "import-file",
+              "reason": "visually hidden file input; the Import button opens it"
+            },
+            {
+              "element": "a \"калькулятору\"",
+              "width": 88,
+              "height": 14,
+              "testId": null,
+              "reason": "inline text link inside a paragraph (WCAG inline exception)"
+            }
+          ]
+        },
+        "editor": {
+          "viewportWidth": 320,
+          "documentClientWidth": 320,
+          "documentScrollWidth": 320,
+          "horizontalOverflowPx": 0,
+          "overflowersCount": 0,
+          "overflowers": [],
+          "clippedFields": [],
+          "clippedControls": [],
+          "clippedControlsCount": 0,
+          "interactiveCount": 23,
+          "smallTargets": [],
+          "smallTargetsCount": 0,
+          "informationalTargets": []
+        },
+        "editorOpen": {
+          "viewportWidth": 320,
+          "documentClientWidth": 320,
+          "documentScrollWidth": 320,
+          "horizontalOverflowPx": 0,
+          "overflowersCount": 0,
+          "overflowers": [],
+          "clippedFields": [],
+          "clippedControls": [],
+          "clippedControlsCount": 0,
+          "interactiveCount": 37,
+          "smallTargets": [],
+          "smallTargetsCount": 0,
+          "informationalTargets": [
+            {
+              "element": "button[tariff-wardrobe-ldsp-russia-confirmed]",
+              "width": 16,
+              "height": 16,
+              "testId": "tariff-wardrobe-ldsp-russia-confirmed",
+              "labelTarget": {
+                "width": 184,
+                "height": 88
+              },
+              "reason": "checkbox box is small; its <label> is the ≥44px touch target"
+            },
+            {
+              "element": "button[tariff-wardrobe-ldsp-russia-service-hardware]",
+              "width": 16,
+              "height": 16,
+              "testId": "tariff-wardrobe-ldsp-russia-service-hardware",
+              "labelTarget": {
+                "width": 184,
+                "height": 44
+              },
+              "reason": "checkbox box is small; its <label> is the ≥44px touch target"
+            },
+            {
+              "element": "button[tariff-wardrobe-ldsp-russia-service-manufacturing]",
+              "width": 16,
+              "height": 16,
+              "testId": "tariff-wardrobe-ldsp-russia-service-manufacturing",
+              "labelTarget": {
+                "width": 184,
+                "height": 44
+              },
+              "reason": "checkbox box is small; its <label> is the ≥44px touch target"
+            },
+            {
+              "element": "button[tariff-wardrobe-ldsp-russia-service-installation]",
+              "width": 16,
+              "height": 16,
+              "testId": "tariff-wardrobe-ldsp-russia-service-installation",
+              "labelTarget": {
+                "width": 184,
+                "height": 44
+              },
+              "reason": "checkbox box is small; its <label> is the ≥44px touch target"
+            }
+          ]
+        },
+        "rejected": {
+          "viewportWidth": 320,
+          "documentClientWidth": 320,
+          "documentScrollWidth": 320,
+          "horizontalOverflowPx": 0,
+          "overflowersCount": 0,
+          "overflowers": [],
+          "clippedFields": [],
+          "clippedControls": [],
+          "clippedControlsCount": 0,
+          "interactiveCount": 12,
+          "smallTargets": [],
+          "smallTargetsCount": 0,
+          "informationalTargets": [
+            {
+              "element": "input[import-file] \"Импорт тарифного профиля из JSON\"",
+              "width": 1,
+              "height": 1,
+              "testId": "import-file",
+              "reason": "visually hidden file input; the Import button opens it"
+            },
+            {
+              "element": "a \"калькулятору\"",
+              "width": 88,
+              "height": 14,
+              "testId": null,
+              "reason": "inline text link inside a paragraph (WCAG inline exception)"
+            }
+          ]
+        },
+        "template": {
+          "viewportWidth": 320,
+          "documentClientWidth": 320,
+          "documentScrollWidth": 320,
+          "horizontalOverflowPx": 0,
+          "overflowersCount": 0,
+          "overflowers": [],
+          "clippedFields": [],
+          "clippedControls": [],
+          "clippedControlsCount": 0,
+          "interactiveCount": 5,
+          "smallTargets": [],
+          "smallTargetsCount": 0,
+          "informationalTargets": []
+        },
+        "preview": {
+          "viewportWidth": 320,
+          "documentClientWidth": 320,
+          "documentScrollWidth": 320,
+          "horizontalOverflowPx": 0,
+          "overflowersCount": 0,
+          "overflowers": [],
+          "clippedFields": [],
+          "clippedControls": [],
+          "clippedControlsCount": 0,
+          "interactiveCount": 23,
+          "smallTargets": [],
+          "smallTargetsCount": 0,
+          "informationalTargets": []
+        }
+      },
+      "screenshots": [
+        "320-01-profiles.png",
+        "320-02-create-dialog.png",
+        "320-03-editor-top.png",
+        "320-04-editor-tariff-open.png",
+        "320-05-editor-saved.png",
+        "320-06-editor-reopened.png",
+        "320-07-reopened-from-list.png",
+        "320-08-dirty-draft.png",
+        "320-09-beforeunload-stay.png",
+        "320-10-back-stay.png",
+        "320-11-back-discarded.png",
+        "320-12-forward.png",
+        "320-13-rejected-warning.png",
+        "320-14-rejected-exported.png",
+        "320-15-template-readonly.png",
+        "320-16-preview.png"
+      ],
+      "profileId": "user-moya-masterskaya",
+      "indexedDb": {
+        "keys": [
+          "user-moya-masterskaya"
+        ],
+        "stores": [
+          "meta",
+          "profiles"
+        ],
+        "databases": [
+          {
+            "name": "salamat-calc",
+            "version": 1
+          }
+        ],
+        "version": 2
+      },
+      "fixedBar": {
+        "previewBottom": 523,
+        "barTop": 679,
+        "barHeight": 61,
+        "barInsideViewport": true,
+        "covered": false
+      },
+      "hitTestProblems": []
+    },
+    "375px": {
+      "viewport": {
+        "width": 375,
+        "height": 740
+      },
+      "steps": {
+        "profiles-load": {
+          "ok": true
+        },
+        "open-create-dialog": {
+          "ok": true
+        },
+        "create-profile": {
+          "ok": true
+        },
+        "edit-tariff": {
+          "ok": true
+        },
+        "fill-tariff": {
+          "ok": true
+        },
+        "save-profile": {
+          "ok": true
+        },
+        "reload-reopen": {
+          "ok": true
+        },
+        "reopen-from-list": {
+          "ok": true
+        },
+        "dirty-draft": {
+          "ok": true
+        },
+        "native-beforeunload-dialog": {
+          "ok": true,
+          "value": {
+            "dialogInfo": {
+              "type": "beforeunload",
+              "message": ""
+            },
+            "stillOnEditor": true,
+            "stillDirty": true
+          }
+        },
+        "browser-back-stay": {
+          "ok": true,
+          "value": {
+            "dialogInfo": {
+              "type": "confirm",
+              "message": "Есть несохранённые изменения. Выйти без сохранения?"
+            },
+            "url": "http://127.0.0.1:5000/#/tariffs/user-moya-masterskaya",
+            "editorVisible": true,
+            "name": "Моя мастерская QA",
+            "dirty": true
+          }
+        },
+        "browser-back-leave": {
+          "ok": true,
+          "value": {
+            "dialogInfo": {
+              "type": "confirm",
+              "message": "Есть несохранённые изменения. Выйти без сохранения?"
+            },
+            "url": "http://127.0.0.1:5000/#/tariffs"
+          }
+        },
+        "browser-forward": {
+          "ok": true,
+          "value": {
+            "url": "http://127.0.0.1:5000/#/tariffs/user-moya-masterskaya",
+            "name": "Моя мастерская",
+            "dirty": false
+          }
+        },
+        "clean-back": {
+          "ok": true,
+          "value": {
+            "dialog": null,
+            "url": "http://127.0.0.1:5000/#/tariffs/user-moya-masterskaya"
+          }
+        },
+        "seed-corrupt-record": {
+          "ok": true
+        },
+        "export-rejected-records": {
+          "ok": true,
+          "value": {
+            "fileName": "salamat-calc-rejected-profiles-1792523659894.json",
+            "format": "salamat-calc-rejected-profiles-v1",
+            "keys": [
+              "corrupt-qa-record"
+            ],
+            "reason": "Не пройдена проверка полей: version, currency, categories, calculationMethod, tariffs",
+            "rawHasRecord": true,
+            "keysAfterExport": [
+              "corrupt-qa-record",
+              "user-moya-masterskaya"
+            ]
+          }
+        },
+        "template-editor": {
+          "ok": true
+        },
+        "preview-block": {
+          "ok": true
+        }
+      },
+      "audits": {
+        "profiles": {
+          "viewportWidth": 375,
+          "documentClientWidth": 375,
+          "documentScrollWidth": 375,
+          "horizontalOverflowPx": 0,
+          "overflowersCount": 0,
+          "overflowers": [],
+          "clippedFields": [],
+          "clippedControls": [],
+          "clippedControlsCount": 0,
+          "interactiveCount": 6,
+          "smallTargets": [],
+          "smallTargetsCount": 0,
+          "informationalTargets": [
+            {
+              "element": "input[import-file] \"Импорт тарифного профиля из JSON\"",
+              "width": 1,
+              "height": 1,
+              "testId": "import-file",
+              "reason": "visually hidden file input; the Import button opens it"
+            },
+            {
+              "element": "a \"калькулятору\"",
+              "width": 88,
+              "height": 14,
+              "testId": null,
+              "reason": "inline text link inside a paragraph (WCAG inline exception)"
+            }
+          ]
+        },
+        "createDialog": {
+          "viewportWidth": 375,
+          "documentClientWidth": 375,
+          "documentScrollWidth": 375,
+          "horizontalOverflowPx": 0,
+          "overflowersCount": 0,
+          "overflowers": [],
+          "clippedFields": [],
+          "clippedControls": [],
+          "clippedControlsCount": 0,
+          "interactiveCount": 6,
+          "smallTargets": [],
+          "smallTargetsCount": 0,
+          "informationalTargets": [
+            {
+              "element": "input[import-file] \"Импорт тарифного профиля из JSON\"",
+              "width": 1,
+              "height": 1,
+              "testId": "import-file",
+              "reason": "visually hidden file input; the Import button opens it"
+            },
+            {
+              "element": "a \"калькулятору\"",
+              "width": 88,
+              "height": 14,
+              "testId": null,
+              "reason": "inline text link inside a paragraph (WCAG inline exception)"
+            }
+          ]
+        },
+        "editor": {
+          "viewportWidth": 375,
+          "documentClientWidth": 375,
+          "documentScrollWidth": 375,
+          "horizontalOverflowPx": 0,
+          "overflowersCount": 0,
+          "overflowers": [],
+          "clippedFields": [],
+          "clippedControls": [],
+          "clippedControlsCount": 0,
+          "interactiveCount": 23,
+          "smallTargets": [],
+          "smallTargetsCount": 0,
+          "informationalTargets": []
+        },
+        "editorOpen": {
+          "viewportWidth": 375,
+          "documentClientWidth": 375,
+          "documentScrollWidth": 375,
+          "horizontalOverflowPx": 0,
+          "overflowersCount": 0,
+          "overflowers": [],
+          "clippedFields": [],
+          "clippedControls": [],
+          "clippedControlsCount": 0,
+          "interactiveCount": 37,
+          "smallTargets": [],
+          "smallTargetsCount": 0,
+          "informationalTargets": [
+            {
+              "element": "button[tariff-wardrobe-ldsp-russia-confirmed]",
+              "width": 16,
+              "height": 16,
+              "testId": "tariff-wardrobe-ldsp-russia-confirmed",
+              "labelTarget": {
+                "width": 239,
+                "height": 72
+              },
+              "reason": "checkbox box is small; its <label> is the ≥44px touch target"
+            },
+            {
+              "element": "button[tariff-wardrobe-ldsp-russia-service-hardware]",
+              "width": 16,
+              "height": 16,
+              "testId": "tariff-wardrobe-ldsp-russia-service-hardware",
+              "labelTarget": {
+                "width": 239,
+                "height": 44
+              },
+              "reason": "checkbox box is small; its <label> is the ≥44px touch target"
+            },
+            {
+              "element": "button[tariff-wardrobe-ldsp-russia-service-manufacturing]",
+              "width": 16,
+              "height": 16,
+              "testId": "tariff-wardrobe-ldsp-russia-service-manufacturing",
+              "labelTarget": {
+                "width": 239,
+                "height": 44
+              },
+              "reason": "checkbox box is small; its <label> is the ≥44px touch target"
+            },
+            {
+              "element": "button[tariff-wardrobe-ldsp-russia-service-installation]",
+              "width": 16,
+              "height": 16,
+              "testId": "tariff-wardrobe-ldsp-russia-service-installation",
+              "labelTarget": {
+                "width": 239,
+                "height": 44
+              },
+              "reason": "checkbox box is small; its <label> is the ≥44px touch target"
+            }
+          ]
+        },
+        "rejected": {
+          "viewportWidth": 375,
+          "documentClientWidth": 375,
+          "documentScrollWidth": 375,
+          "horizontalOverflowPx": 0,
+          "overflowersCount": 0,
+          "overflowers": [],
+          "clippedFields": [],
+          "clippedControls": [],
+          "clippedControlsCount": 0,
+          "interactiveCount": 12,
+          "smallTargets": [],
+          "smallTargetsCount": 0,
+          "informationalTargets": [
+            {
+              "element": "input[import-file] \"Импорт тарифного профиля из JSON\"",
+              "width": 1,
+              "height": 1,
+              "testId": "import-file",
+              "reason": "visually hidden file input; the Import button opens it"
+            },
+            {
+              "element": "a \"калькулятору\"",
+              "width": 88,
+              "height": 14,
+              "testId": null,
+              "reason": "inline text link inside a paragraph (WCAG inline exception)"
+            }
+          ]
+        },
+        "template": {
+          "viewportWidth": 375,
+          "documentClientWidth": 375,
+          "documentScrollWidth": 375,
+          "horizontalOverflowPx": 0,
+          "overflowersCount": 0,
+          "overflowers": [],
+          "clippedFields": [],
+          "clippedControls": [],
+          "clippedControlsCount": 0,
+          "interactiveCount": 5,
+          "smallTargets": [],
+          "smallTargetsCount": 0,
+          "informationalTargets": []
+        },
+        "preview": {
+          "viewportWidth": 375,
+          "documentClientWidth": 375,
+          "documentScrollWidth": 375,
+          "horizontalOverflowPx": 0,
+          "overflowersCount": 0,
+          "overflowers": [],
+          "clippedFields": [],
+          "clippedControls": [],
+          "clippedControlsCount": 0,
+          "interactiveCount": 23,
+          "smallTargets": [],
+          "smallTargetsCount": 0,
+          "informationalTargets": []
+        }
+      },
+      "screenshots": [
+        "375-01-profiles.png",
+        "375-02-create-dialog.png",
+        "375-03-editor-top.png",
+        "375-04-editor-tariff-open.png",
+        "375-05-editor-saved.png",
+        "375-06-editor-reopened.png",
+        "375-07-reopened-from-list.png",
+        "375-08-dirty-draft.png",
+        "375-09-beforeunload-stay.png",
+        "375-10-back-stay.png",
+        "375-11-back-discarded.png",
+        "375-12-forward.png",
+        "375-13-rejected-warning.png",
+        "375-14-rejected-exported.png",
+        "375-15-template-readonly.png",
+        "375-16-preview.png"
+      ],
+      "profileId": "user-moya-masterskaya",
+      "indexedDb": {
+        "keys": [
+          "user-moya-masterskaya"
+        ],
+        "stores": [
+          "meta",
+          "profiles"
+        ],
+        "databases": [
+          {
+            "name": "salamat-calc",
+            "version": 1
+          }
+        ],
+        "version": 2
+      },
+      "fixedBar": {
+        "previewBottom": 523,
+        "barTop": 679,
+        "barHeight": 61,
+        "barInsideViewport": true,
+        "covered": false
+      },
+      "hitTestProblems": []
+    },
+    "430px": {
+      "viewport": {
+        "width": 430,
+        "height": 740
+      },
+      "steps": {
+        "profiles-load": {
+          "ok": true
+        },
+        "open-create-dialog": {
+          "ok": true
+        },
+        "create-profile": {
+          "ok": true
+        },
+        "edit-tariff": {
+          "ok": true
+        },
+        "fill-tariff": {
+          "ok": true
+        },
+        "save-profile": {
+          "ok": true
+        },
+        "reload-reopen": {
+          "ok": true
+        },
+        "reopen-from-list": {
+          "ok": true
+        },
+        "dirty-draft": {
+          "ok": true
+        },
+        "native-beforeunload-dialog": {
+          "ok": true,
+          "value": {
+            "dialogInfo": {
+              "type": "beforeunload",
+              "message": ""
+            },
+            "stillOnEditor": true,
+            "stillDirty": true
+          }
+        },
+        "browser-back-stay": {
+          "ok": true,
+          "value": {
+            "dialogInfo": {
+              "type": "confirm",
+              "message": "Есть несохранённые изменения. Выйти без сохранения?"
+            },
+            "url": "http://127.0.0.1:5000/#/tariffs/user-moya-masterskaya",
+            "editorVisible": true,
+            "name": "Моя мастерская QA",
+            "dirty": true
+          }
+        },
+        "browser-back-leave": {
+          "ok": true,
+          "value": {
+            "dialogInfo": {
+              "type": "confirm",
+              "message": "Есть несохранённые изменения. Выйти без сохранения?"
+            },
+            "url": "http://127.0.0.1:5000/#/tariffs"
+          }
+        },
+        "browser-forward": {
+          "ok": true,
+          "value": {
+            "url": "http://127.0.0.1:5000/#/tariffs/user-moya-masterskaya",
+            "name": "Моя мастерская",
+            "dirty": false
+          }
+        },
+        "clean-back": {
+          "ok": true,
+          "value": {
+            "dialog": null,
+            "url": "http://127.0.0.1:5000/#/tariffs/user-moya-masterskaya"
+          }
+        },
+        "seed-corrupt-record": {
+          "ok": true
+        },
+        "export-rejected-records": {
+          "ok": true,
+          "value": {
+            "fileName": "salamat-calc-rejected-profiles-1792523690110.json",
+            "format": "salamat-calc-rejected-profiles-v1",
+            "keys": [
+              "corrupt-qa-record"
+            ],
+            "reason": "Не пройдена проверка полей: version, currency, categories, calculationMethod, tariffs",
+            "rawHasRecord": true,
+            "keysAfterExport": [
+              "corrupt-qa-record",
+              "user-moya-masterskaya"
+            ]
+          }
+        },
+        "template-editor": {
+          "ok": true
+        },
+        "preview-block": {
+          "ok": true
+        }
+      },
+      "audits": {
+        "profiles": {
+          "viewportWidth": 430,
+          "documentClientWidth": 430,
+          "documentScrollWidth": 430,
+          "horizontalOverflowPx": 0,
+          "overflowersCount": 0,
+          "overflowers": [],
+          "clippedFields": [],
+          "clippedControls": [],
+          "clippedControlsCount": 0,
+          "interactiveCount": 6,
+          "smallTargets": [],
+          "smallTargetsCount": 0,
+          "informationalTargets": [
+            {
+              "element": "input[import-file] \"Импорт тарифного профиля из JSON\"",
+              "width": 1,
+              "height": 1,
+              "testId": "import-file",
+              "reason": "visually hidden file input; the Import button opens it"
+            },
+            {
+              "element": "a \"калькулятору\"",
+              "width": 88,
+              "height": 14,
+              "testId": null,
+              "reason": "inline text link inside a paragraph (WCAG inline exception)"
+            }
+          ]
+        },
+        "createDialog": {
+          "viewportWidth": 430,
+          "documentClientWidth": 430,
+          "documentScrollWidth": 430,
+          "horizontalOverflowPx": 0,
+          "overflowersCount": 0,
+          "overflowers": [],
+          "clippedFields": [],
+          "clippedControls": [],
+          "clippedControlsCount": 0,
+          "interactiveCount": 6,
+          "smallTargets": [],
+          "smallTargetsCount": 0,
+          "informationalTargets": [
+            {
+              "element": "input[import-file] \"Импорт тарифного профиля из JSON\"",
+              "width": 1,
+              "height": 1,
+              "testId": "import-file",
+              "reason": "visually hidden file input; the Import button opens it"
+            },
+            {
+              "element": "a \"калькулятору\"",
+              "width": 88,
+              "height": 14,
+              "testId": null,
+              "reason": "inline text link inside a paragraph (WCAG inline exception)"
+            }
+          ]
+        },
+        "editor": {
+          "viewportWidth": 430,
+          "documentClientWidth": 430,
+          "documentScrollWidth": 430,
+          "horizontalOverflowPx": 0,
+          "overflowersCount": 0,
+          "overflowers": [],
+          "clippedFields": [],
+          "clippedControls": [],
+          "clippedControlsCount": 0,
+          "interactiveCount": 23,
+          "smallTargets": [],
+          "smallTargetsCount": 0,
+          "informationalTargets": []
+        },
+        "editorOpen": {
+          "viewportWidth": 430,
+          "documentClientWidth": 430,
+          "documentScrollWidth": 430,
+          "horizontalOverflowPx": 0,
+          "overflowersCount": 0,
+          "overflowers": [],
+          "clippedFields": [],
+          "clippedControls": [],
+          "clippedControlsCount": 0,
+          "interactiveCount": 37,
+          "smallTargets": [],
+          "smallTargetsCount": 0,
+          "informationalTargets": [
+            {
+              "element": "button[tariff-wardrobe-ldsp-russia-confirmed]",
+              "width": 16,
+              "height": 16,
+              "testId": "tariff-wardrobe-ldsp-russia-confirmed",
+              "labelTarget": {
+                "width": 294,
+                "height": 72
+              },
+              "reason": "checkbox box is small; its <label> is the ≥44px touch target"
+            },
+            {
+              "element": "button[tariff-wardrobe-ldsp-russia-service-hardware]",
+              "width": 16,
+              "height": 16,
+              "testId": "tariff-wardrobe-ldsp-russia-service-hardware",
+              "labelTarget": {
+                "width": 294,
+                "height": 44
+              },
+              "reason": "checkbox box is small; its <label> is the ≥44px touch target"
+            },
+            {
+              "element": "button[tariff-wardrobe-ldsp-russia-service-manufacturing]",
+              "width": 16,
+              "height": 16,
+              "testId": "tariff-wardrobe-ldsp-russia-service-manufacturing",
+              "labelTarget": {
+                "width": 294,
+                "height": 44
+              },
+              "reason": "checkbox box is small; its <label> is the ≥44px touch target"
+            },
+            {
+              "element": "button[tariff-wardrobe-ldsp-russia-service-installation]",
+              "width": 16,
+              "height": 16,
+              "testId": "tariff-wardrobe-ldsp-russia-service-installation",
+              "labelTarget": {
+                "width": 294,
+                "height": 44
+              },
+              "reason": "checkbox box is small; its <label> is the ≥44px touch target"
+            }
+          ]
+        },
+        "rejected": {
+          "viewportWidth": 430,
+          "documentClientWidth": 430,
+          "documentScrollWidth": 430,
+          "horizontalOverflowPx": 0,
+          "overflowersCount": 0,
+          "overflowers": [],
+          "clippedFields": [],
+          "clippedControls": [],
+          "clippedControlsCount": 0,
+          "interactiveCount": 12,
+          "smallTargets": [],
+          "smallTargetsCount": 0,
+          "informationalTargets": [
+            {
+              "element": "input[import-file] \"Импорт тарифного профиля из JSON\"",
+              "width": 1,
+              "height": 1,
+              "testId": "import-file",
+              "reason": "visually hidden file input; the Import button opens it"
+            },
+            {
+              "element": "a \"калькулятору\"",
+              "width": 88,
+              "height": 14,
+              "testId": null,
+              "reason": "inline text link inside a paragraph (WCAG inline exception)"
+            }
+          ]
+        },
+        "template": {
+          "viewportWidth": 430,
+          "documentClientWidth": 430,
+          "documentScrollWidth": 430,
+          "horizontalOverflowPx": 0,
+          "overflowersCount": 0,
+          "overflowers": [],
+          "clippedFields": [],
+          "clippedControls": [],
+          "clippedControlsCount": 0,
+          "interactiveCount": 5,
+          "smallTargets": [],
+          "smallTargetsCount": 0,
+          "informationalTargets": []
+        },
+        "preview": {
+          "viewportWidth": 430,
+          "documentClientWidth": 430,
+          "documentScrollWidth": 430,
+          "horizontalOverflowPx": 0,
+          "overflowersCount": 0,
+          "overflowers": [],
+          "clippedFields": [],
+          "clippedControls": [],
+          "clippedControlsCount": 0,
+          "interactiveCount": 23,
+          "smallTargets": [],
+          "smallTargetsCount": 0,
+          "informationalTargets": []
+        }
+      },
+      "screenshots": [
+        "430-01-profiles.png",
+        "430-02-create-dialog.png",
+        "430-03-editor-top.png",
+        "430-04-editor-tariff-open.png",
+        "430-05-editor-saved.png",
+        "430-06-editor-reopened.png",
+        "430-07-reopened-from-list.png",
+        "430-08-dirty-draft.png",
+        "430-09-beforeunload-stay.png",
+        "430-10-back-stay.png",
+        "430-11-back-discarded.png",
+        "430-12-forward.png",
+        "430-13-rejected-warning.png",
+        "430-14-rejected-exported.png",
+        "430-15-template-readonly.png",
+        "430-16-preview.png"
+      ],
+      "profileId": "user-moya-masterskaya",
+      "indexedDb": {
+        "keys": [
+          "user-moya-masterskaya"
+        ],
+        "stores": [
+          "meta",
+          "profiles"
+        ],
+        "databases": [
+          {
+            "name": "salamat-calc",
+            "version": 1
+          }
+        ],
+        "version": 2
+      },
+      "fixedBar": {
+        "previewBottom": 523,
+        "barTop": 679,
+        "barHeight": 61,
+        "barInsideViewport": true,
+        "covered": false
+      },
+      "hitTestProblems": []
+    }
+  },
+  "checks": [
+    {
+      "check": "320px profiles: no horizontal scroll",
+      "ok": true,
+      "detail": {
+        "viewportWidth": 320,
+        "documentClientWidth": 320,
+        "documentScrollWidth": 320,
+        "horizontalOverflowPx": 0,
+        "overflowersCount": 0,
+        "overflowers": [],
+        "clippedFields": [],
+        "clippedControls": [],
+        "clippedControlsCount": 0,
+        "interactiveCount": 6,
+        "smallTargets": [],
+        "smallTargetsCount": 0,
+        "informationalTargets": [
+          {
+            "element": "input[import-file] \"Импорт тарифного профиля из JSON\"",
+            "width": 1,
+            "height": 1,
+            "testId": "import-file",
+            "reason": "visually hidden file input; the Import button opens it"
+          },
+          {
+            "element": "a \"калькулятору\"",
+            "width": 88,
+            "height": 14,
+            "testId": null,
+            "reason": "inline text link inside a paragraph (WCAG inline exception)"
+          }
+        ]
+      }
+    },
+    {
+      "check": "320px profiles: no undersized controls",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "320px profiles: no clipped button labels",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "320px template profile visible",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "320px empty state on fresh IndexedDB",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "320px create dialog: no horizontal scroll",
+      "ok": true,
+      "detail": {
+        "viewportWidth": 320,
+        "documentClientWidth": 320,
+        "documentScrollWidth": 320,
+        "horizontalOverflowPx": 0,
+        "overflowersCount": 0,
+        "overflowers": [],
+        "clippedFields": [],
+        "clippedControls": [],
+        "clippedControlsCount": 0,
+        "interactiveCount": 6,
+        "smallTargets": [],
+        "smallTargetsCount": 0,
+        "informationalTargets": [
+          {
+            "element": "input[import-file] \"Импорт тарифного профиля из JSON\"",
+            "width": 1,
+            "height": 1,
+            "testId": "import-file",
+            "reason": "visually hidden file input; the Import button opens it"
+          },
+          {
+            "element": "a \"калькулятору\"",
+            "width": 88,
+            "height": 14,
+            "testId": null,
+            "reason": "inline text link inside a paragraph (WCAG inline exception)"
+          }
+        ]
+      }
+    },
+    {
+      "check": "320px create dialog: every button is tappable",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "320px profile created with a user id",
+      "ok": true,
+      "detail": "user-moya-masterskaya"
+    },
+    {
+      "check": "320px created profile is really in IndexedDB",
+      "ok": true,
+      "detail": [
+        "user-moya-masterskaya"
+      ]
+    },
+    {
+      "check": "320px editor: no horizontal scroll",
+      "ok": true,
+      "detail": {
+        "viewportWidth": 320,
+        "documentClientWidth": 320,
+        "documentScrollWidth": 320,
+        "horizontalOverflowPx": 0,
+        "overflowersCount": 0,
+        "overflowers": [],
+        "clippedFields": [],
+        "clippedControls": [],
+        "clippedControlsCount": 0,
+        "interactiveCount": 23,
+        "smallTargets": [],
+        "smallTargetsCount": 0,
+        "informationalTargets": []
+      }
+    },
+    {
+      "check": "320px editor: no undersized controls",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "320px editor: no clipped button labels",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "320px negative price rejected with an inline message",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "320px confirmation checkbox is operated through a ≥44px label",
+      "ok": true,
+      "detail": {
+        "width": 184,
+        "height": 88
+      }
+    },
+    {
+      "check": "320px editor with open tariff: no horizontal scroll",
+      "ok": true,
+      "detail": {
+        "viewportWidth": 320,
+        "documentClientWidth": 320,
+        "documentScrollWidth": 320,
+        "horizontalOverflowPx": 0,
+        "overflowersCount": 0,
+        "overflowers": [],
+        "clippedFields": [],
+        "clippedControls": [],
+        "clippedControlsCount": 0,
+        "interactiveCount": 37,
+        "smallTargets": [],
+        "smallTargetsCount": 0,
+        "informationalTargets": [
+          {
+            "element": "button[tariff-wardrobe-ldsp-russia-confirmed]",
+            "width": 16,
+            "height": 16,
+            "testId": "tariff-wardrobe-ldsp-russia-confirmed",
+            "labelTarget": {
+              "width": 184,
+              "height": 88
+            },
+            "reason": "checkbox box is small; its <label> is the ≥44px touch target"
+          },
+          {
+            "element": "button[tariff-wardrobe-ldsp-russia-service-hardware]",
+            "width": 16,
+            "height": 16,
+            "testId": "tariff-wardrobe-ldsp-russia-service-hardware",
+            "labelTarget": {
+              "width": 184,
+              "height": 44
+            },
+            "reason": "checkbox box is small; its <label> is the ≥44px touch target"
+          },
+          {
+            "element": "button[tariff-wardrobe-ldsp-russia-service-manufacturing]",
+            "width": 16,
+            "height": 16,
+            "testId": "tariff-wardrobe-ldsp-russia-service-manufacturing",
+            "labelTarget": {
+              "width": 184,
+              "height": 44
+            },
+            "reason": "checkbox box is small; its <label> is the ≥44px touch target"
+          },
+          {
+            "element": "button[tariff-wardrobe-ldsp-russia-service-installation]",
+            "width": 16,
+            "height": 16,
+            "testId": "tariff-wardrobe-ldsp-russia-service-installation",
+            "labelTarget": {
+              "width": 184,
+              "height": 44
+            },
+            "reason": "checkbox box is small; its <label> is the ≥44px touch target"
+          }
+        ]
+      }
+    },
+    {
+      "check": "320px editor with open tariff: no undersized controls",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "320px editor with open tariff: no clipped button labels",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "320px dirty indicator after edit",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "320px saved profile version incremented",
+      "ok": true,
+      "detail": 2
+    },
+    {
+      "check": "320px edited price persisted in IndexedDB",
+      "ok": true,
+      "detail": 180000
+    },
+    {
+      "check": "320px confirmation persisted in IndexedDB",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "320px real IndexedDB database present",
+      "ok": true,
+      "detail": [
+        {
+          "name": "salamat-calc",
+          "version": 1
+        }
+      ]
+    },
+    {
+      "check": "320px IndexedDB object stores",
+      "ok": true,
+      "detail": [
+        "meta",
+        "profiles"
+      ]
+    },
+    {
+      "check": "320px editor reopened after a real page reload",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "320px beforeunload handler prevents unload with a dirty draft",
+      "ok": true,
+      "detail": {
+        "defaultPrevented": true,
+        "returnValue": false
+      }
+    },
+    {
+      "check": "320px native beforeunload dialog shown on reload",
+      "ok": true,
+      "detail": {
+        "type": "beforeunload",
+        "message": ""
+      }
+    },
+    {
+      "check": "320px dismissing the beforeunload dialog keeps the dirty draft",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "320px Browser Back asks before discarding a dirty draft",
+      "ok": true,
+      "detail": {
+        "type": "confirm",
+        "message": "Есть несохранённые изменения. Выйти без сохранения?"
+      }
+    },
+    {
+      "check": "320px confirmation text mentions unsaved changes",
+      "ok": true,
+      "detail": "Есть несохранённые изменения. Выйти без сохранения?"
+    },
+    {
+      "check": "320px declining Back keeps the editor mounted",
+      "ok": true,
+      "detail": "http://127.0.0.1:5000/#/tariffs/user-moya-masterskaya"
+    },
+    {
+      "check": "320px declining Back keeps the unsaved draft",
+      "ok": true,
+      "detail": {
+        "name": "Моя мастерская QA"
+      }
+    },
+    {
+      "check": "320px accepting Back asks exactly once",
+      "ok": true,
+      "detail": {
+        "type": "confirm",
+        "message": "Есть несохранённые изменения. Выйти без сохранения?"
+      }
+    },
+    {
+      "check": "320px accepted Back leaves the editor",
+      "ok": true,
+      "detail": "http://127.0.0.1:5000/#/tariffs"
+    },
+    {
+      "check": "320px Forward returns to the editor route",
+      "ok": true,
+      "detail": "http://127.0.0.1:5000/#/tariffs/user-moya-masterskaya"
+    },
+    {
+      "check": "320px Forward shows the saved profile, not the discarded draft",
+      "ok": true,
+      "detail": "Моя мастерская"
+    },
+    {
+      "check": "320px Forward leaves no dirty state behind",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "320px clean editor navigates without a confirmation",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "320px rejected-record warning: no horizontal scroll",
+      "ok": true,
+      "detail": {
+        "viewportWidth": 320,
+        "documentClientWidth": 320,
+        "documentScrollWidth": 320,
+        "horizontalOverflowPx": 0,
+        "overflowersCount": 0,
+        "overflowers": [],
+        "clippedFields": [],
+        "clippedControls": [],
+        "clippedControlsCount": 0,
+        "interactiveCount": 12,
+        "smallTargets": [],
+        "smallTargetsCount": 0,
+        "informationalTargets": [
+          {
+            "element": "input[import-file] \"Импорт тарифного профиля из JSON\"",
+            "width": 1,
+            "height": 1,
+            "testId": "import-file",
+            "reason": "visually hidden file input; the Import button opens it"
+          },
+          {
+            "element": "a \"калькулятору\"",
+            "width": 88,
+            "height": 14,
+            "testId": null,
+            "reason": "inline text link inside a paragraph (WCAG inline exception)"
+          }
+        ]
+      }
+    },
+    {
+      "check": "320px rejected-record warning: no undersized controls",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "320px rejected-record warning: no clipped button labels",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "320px damaged record key is exported",
+      "ok": true,
+      "detail": [
+        "corrupt-qa-record"
+      ]
+    },
+    {
+      "check": "320px raw damaged payload is exported for recovery",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "320px export does not delete the damaged record",
+      "ok": true,
+      "detail": [
+        "corrupt-qa-record",
+        "user-moya-masterskaya"
+      ]
+    },
+    {
+      "check": "320px export keeps valid profiles intact",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "320px valid profile is still listed next to the damaged one",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "320px template editor: no horizontal scroll",
+      "ok": true,
+      "detail": {
+        "viewportWidth": 320,
+        "documentClientWidth": 320,
+        "documentScrollWidth": 320,
+        "horizontalOverflowPx": 0,
+        "overflowersCount": 0,
+        "overflowers": [],
+        "clippedFields": [],
+        "clippedControls": [],
+        "clippedControlsCount": 0,
+        "interactiveCount": 5,
+        "smallTargets": [],
+        "smallTargetsCount": 0,
+        "informationalTargets": []
+      }
+    },
+    {
+      "check": "320px template editor: no clipped button labels",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "320px template profile fields are read-only",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "320px template has no save button",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "320px save bar stays inside the viewport",
+      "ok": true,
+      "detail": {
+        "previewBottom": 523,
+        "barTop": 679,
+        "barHeight": 61,
+        "barInsideViewport": true,
+        "covered": false
+      }
+    },
+    {
+      "check": "320px save bar does not cover the preview content",
+      "ok": true,
+      "detail": {
+        "previewBottom": 523,
+        "barTop": 679,
+        "barHeight": 61,
+        "barInsideViewport": true,
+        "covered": false
+      }
+    },
+    {
+      "check": "320px editor preview: no horizontal scroll",
+      "ok": true,
+      "detail": {
+        "viewportWidth": 320,
+        "documentClientWidth": 320,
+        "documentScrollWidth": 320,
+        "horizontalOverflowPx": 0,
+        "overflowersCount": 0,
+        "overflowers": [],
+        "clippedFields": [],
+        "clippedControls": [],
+        "clippedControlsCount": 0,
+        "interactiveCount": 23,
+        "smallTargets": [],
+        "smallTargetsCount": 0,
+        "informationalTargets": []
+      }
+    },
+    {
+      "check": "320px editor preview: no undersized controls",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "320px editor preview: no clipped button labels",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "320px every visible button/link is hit-testable",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "375px profiles: no horizontal scroll",
+      "ok": true,
+      "detail": {
+        "viewportWidth": 375,
+        "documentClientWidth": 375,
+        "documentScrollWidth": 375,
+        "horizontalOverflowPx": 0,
+        "overflowersCount": 0,
+        "overflowers": [],
+        "clippedFields": [],
+        "clippedControls": [],
+        "clippedControlsCount": 0,
+        "interactiveCount": 6,
+        "smallTargets": [],
+        "smallTargetsCount": 0,
+        "informationalTargets": [
+          {
+            "element": "input[import-file] \"Импорт тарифного профиля из JSON\"",
+            "width": 1,
+            "height": 1,
+            "testId": "import-file",
+            "reason": "visually hidden file input; the Import button opens it"
+          },
+          {
+            "element": "a \"калькулятору\"",
+            "width": 88,
+            "height": 14,
+            "testId": null,
+            "reason": "inline text link inside a paragraph (WCAG inline exception)"
+          }
+        ]
+      }
+    },
+    {
+      "check": "375px profiles: no undersized controls",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "375px profiles: no clipped button labels",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "375px template profile visible",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "375px empty state on fresh IndexedDB",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "375px create dialog: no horizontal scroll",
+      "ok": true,
+      "detail": {
+        "viewportWidth": 375,
+        "documentClientWidth": 375,
+        "documentScrollWidth": 375,
+        "horizontalOverflowPx": 0,
+        "overflowersCount": 0,
+        "overflowers": [],
+        "clippedFields": [],
+        "clippedControls": [],
+        "clippedControlsCount": 0,
+        "interactiveCount": 6,
+        "smallTargets": [],
+        "smallTargetsCount": 0,
+        "informationalTargets": [
+          {
+            "element": "input[import-file] \"Импорт тарифного профиля из JSON\"",
+            "width": 1,
+            "height": 1,
+            "testId": "import-file",
+            "reason": "visually hidden file input; the Import button opens it"
+          },
+          {
+            "element": "a \"калькулятору\"",
+            "width": 88,
+            "height": 14,
+            "testId": null,
+            "reason": "inline text link inside a paragraph (WCAG inline exception)"
+          }
+        ]
+      }
+    },
+    {
+      "check": "375px create dialog: every button is tappable",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "375px profile created with a user id",
+      "ok": true,
+      "detail": "user-moya-masterskaya"
+    },
+    {
+      "check": "375px created profile is really in IndexedDB",
+      "ok": true,
+      "detail": [
+        "user-moya-masterskaya"
+      ]
+    },
+    {
+      "check": "375px editor: no horizontal scroll",
+      "ok": true,
+      "detail": {
+        "viewportWidth": 375,
+        "documentClientWidth": 375,
+        "documentScrollWidth": 375,
+        "horizontalOverflowPx": 0,
+        "overflowersCount": 0,
+        "overflowers": [],
+        "clippedFields": [],
+        "clippedControls": [],
+        "clippedControlsCount": 0,
+        "interactiveCount": 23,
+        "smallTargets": [],
+        "smallTargetsCount": 0,
+        "informationalTargets": []
+      }
+    },
+    {
+      "check": "375px editor: no undersized controls",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "375px editor: no clipped button labels",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "375px negative price rejected with an inline message",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "375px confirmation checkbox is operated through a ≥44px label",
+      "ok": true,
+      "detail": {
+        "width": 239,
+        "height": 72
+      }
+    },
+    {
+      "check": "375px editor with open tariff: no horizontal scroll",
+      "ok": true,
+      "detail": {
+        "viewportWidth": 375,
+        "documentClientWidth": 375,
+        "documentScrollWidth": 375,
+        "horizontalOverflowPx": 0,
+        "overflowersCount": 0,
+        "overflowers": [],
+        "clippedFields": [],
+        "clippedControls": [],
+        "clippedControlsCount": 0,
+        "interactiveCount": 37,
+        "smallTargets": [],
+        "smallTargetsCount": 0,
+        "informationalTargets": [
+          {
+            "element": "button[tariff-wardrobe-ldsp-russia-confirmed]",
+            "width": 16,
+            "height": 16,
+            "testId": "tariff-wardrobe-ldsp-russia-confirmed",
+            "labelTarget": {
+              "width": 239,
+              "height": 72
+            },
+            "reason": "checkbox box is small; its <label> is the ≥44px touch target"
+          },
+          {
+            "element": "button[tariff-wardrobe-ldsp-russia-service-hardware]",
+            "width": 16,
+            "height": 16,
+            "testId": "tariff-wardrobe-ldsp-russia-service-hardware",
+            "labelTarget": {
+              "width": 239,
+              "height": 44
+            },
+            "reason": "checkbox box is small; its <label> is the ≥44px touch target"
+          },
+          {
+            "element": "button[tariff-wardrobe-ldsp-russia-service-manufacturing]",
+            "width": 16,
+            "height": 16,
+            "testId": "tariff-wardrobe-ldsp-russia-service-manufacturing",
+            "labelTarget": {
+              "width": 239,
+              "height": 44
+            },
+            "reason": "checkbox box is small; its <label> is the ≥44px touch target"
+          },
+          {
+            "element": "button[tariff-wardrobe-ldsp-russia-service-installation]",
+            "width": 16,
+            "height": 16,
+            "testId": "tariff-wardrobe-ldsp-russia-service-installation",
+            "labelTarget": {
+              "width": 239,
+              "height": 44
+            },
+            "reason": "checkbox box is small; its <label> is the ≥44px touch target"
+          }
+        ]
+      }
+    },
+    {
+      "check": "375px editor with open tariff: no undersized controls",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "375px editor with open tariff: no clipped button labels",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "375px dirty indicator after edit",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "375px saved profile version incremented",
+      "ok": true,
+      "detail": 2
+    },
+    {
+      "check": "375px edited price persisted in IndexedDB",
+      "ok": true,
+      "detail": 180000
+    },
+    {
+      "check": "375px confirmation persisted in IndexedDB",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "375px real IndexedDB database present",
+      "ok": true,
+      "detail": [
+        {
+          "name": "salamat-calc",
+          "version": 1
+        }
+      ]
+    },
+    {
+      "check": "375px IndexedDB object stores",
+      "ok": true,
+      "detail": [
+        "meta",
+        "profiles"
+      ]
+    },
+    {
+      "check": "375px editor reopened after a real page reload",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "375px beforeunload handler prevents unload with a dirty draft",
+      "ok": true,
+      "detail": {
+        "defaultPrevented": true,
+        "returnValue": false
+      }
+    },
+    {
+      "check": "375px native beforeunload dialog shown on reload",
+      "ok": true,
+      "detail": {
+        "type": "beforeunload",
+        "message": ""
+      }
+    },
+    {
+      "check": "375px dismissing the beforeunload dialog keeps the dirty draft",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "375px Browser Back asks before discarding a dirty draft",
+      "ok": true,
+      "detail": {
+        "type": "confirm",
+        "message": "Есть несохранённые изменения. Выйти без сохранения?"
+      }
+    },
+    {
+      "check": "375px confirmation text mentions unsaved changes",
+      "ok": true,
+      "detail": "Есть несохранённые изменения. Выйти без сохранения?"
+    },
+    {
+      "check": "375px declining Back keeps the editor mounted",
+      "ok": true,
+      "detail": "http://127.0.0.1:5000/#/tariffs/user-moya-masterskaya"
+    },
+    {
+      "check": "375px declining Back keeps the unsaved draft",
+      "ok": true,
+      "detail": {
+        "name": "Моя мастерская QA"
+      }
+    },
+    {
+      "check": "375px accepting Back asks exactly once",
+      "ok": true,
+      "detail": {
+        "type": "confirm",
+        "message": "Есть несохранённые изменения. Выйти без сохранения?"
+      }
+    },
+    {
+      "check": "375px accepted Back leaves the editor",
+      "ok": true,
+      "detail": "http://127.0.0.1:5000/#/tariffs"
+    },
+    {
+      "check": "375px Forward returns to the editor route",
+      "ok": true,
+      "detail": "http://127.0.0.1:5000/#/tariffs/user-moya-masterskaya"
+    },
+    {
+      "check": "375px Forward shows the saved profile, not the discarded draft",
+      "ok": true,
+      "detail": "Моя мастерская"
+    },
+    {
+      "check": "375px Forward leaves no dirty state behind",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "375px clean editor navigates without a confirmation",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "375px rejected-record warning: no horizontal scroll",
+      "ok": true,
+      "detail": {
+        "viewportWidth": 375,
+        "documentClientWidth": 375,
+        "documentScrollWidth": 375,
+        "horizontalOverflowPx": 0,
+        "overflowersCount": 0,
+        "overflowers": [],
+        "clippedFields": [],
+        "clippedControls": [],
+        "clippedControlsCount": 0,
+        "interactiveCount": 12,
+        "smallTargets": [],
+        "smallTargetsCount": 0,
+        "informationalTargets": [
+          {
+            "element": "input[import-file] \"Импорт тарифного профиля из JSON\"",
+            "width": 1,
+            "height": 1,
+            "testId": "import-file",
+            "reason": "visually hidden file input; the Import button opens it"
+          },
+          {
+            "element": "a \"калькулятору\"",
+            "width": 88,
+            "height": 14,
+            "testId": null,
+            "reason": "inline text link inside a paragraph (WCAG inline exception)"
+          }
+        ]
+      }
+    },
+    {
+      "check": "375px rejected-record warning: no undersized controls",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "375px rejected-record warning: no clipped button labels",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "375px damaged record key is exported",
+      "ok": true,
+      "detail": [
+        "corrupt-qa-record"
+      ]
+    },
+    {
+      "check": "375px raw damaged payload is exported for recovery",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "375px export does not delete the damaged record",
+      "ok": true,
+      "detail": [
+        "corrupt-qa-record",
+        "user-moya-masterskaya"
+      ]
+    },
+    {
+      "check": "375px export keeps valid profiles intact",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "375px valid profile is still listed next to the damaged one",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "375px template editor: no horizontal scroll",
+      "ok": true,
+      "detail": {
+        "viewportWidth": 375,
+        "documentClientWidth": 375,
+        "documentScrollWidth": 375,
+        "horizontalOverflowPx": 0,
+        "overflowersCount": 0,
+        "overflowers": [],
+        "clippedFields": [],
+        "clippedControls": [],
+        "clippedControlsCount": 0,
+        "interactiveCount": 5,
+        "smallTargets": [],
+        "smallTargetsCount": 0,
+        "informationalTargets": []
+      }
+    },
+    {
+      "check": "375px template editor: no clipped button labels",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "375px template profile fields are read-only",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "375px template has no save button",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "375px save bar stays inside the viewport",
+      "ok": true,
+      "detail": {
+        "previewBottom": 523,
+        "barTop": 679,
+        "barHeight": 61,
+        "barInsideViewport": true,
+        "covered": false
+      }
+    },
+    {
+      "check": "375px save bar does not cover the preview content",
+      "ok": true,
+      "detail": {
+        "previewBottom": 523,
+        "barTop": 679,
+        "barHeight": 61,
+        "barInsideViewport": true,
+        "covered": false
+      }
+    },
+    {
+      "check": "375px editor preview: no horizontal scroll",
+      "ok": true,
+      "detail": {
+        "viewportWidth": 375,
+        "documentClientWidth": 375,
+        "documentScrollWidth": 375,
+        "horizontalOverflowPx": 0,
+        "overflowersCount": 0,
+        "overflowers": [],
+        "clippedFields": [],
+        "clippedControls": [],
+        "clippedControlsCount": 0,
+        "interactiveCount": 23,
+        "smallTargets": [],
+        "smallTargetsCount": 0,
+        "informationalTargets": []
+      }
+    },
+    {
+      "check": "375px editor preview: no undersized controls",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "375px editor preview: no clipped button labels",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "375px every visible button/link is hit-testable",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "430px profiles: no horizontal scroll",
+      "ok": true,
+      "detail": {
+        "viewportWidth": 430,
+        "documentClientWidth": 430,
+        "documentScrollWidth": 430,
+        "horizontalOverflowPx": 0,
+        "overflowersCount": 0,
+        "overflowers": [],
+        "clippedFields": [],
+        "clippedControls": [],
+        "clippedControlsCount": 0,
+        "interactiveCount": 6,
+        "smallTargets": [],
+        "smallTargetsCount": 0,
+        "informationalTargets": [
+          {
+            "element": "input[import-file] \"Импорт тарифного профиля из JSON\"",
+            "width": 1,
+            "height": 1,
+            "testId": "import-file",
+            "reason": "visually hidden file input; the Import button opens it"
+          },
+          {
+            "element": "a \"калькулятору\"",
+            "width": 88,
+            "height": 14,
+            "testId": null,
+            "reason": "inline text link inside a paragraph (WCAG inline exception)"
+          }
+        ]
+      }
+    },
+    {
+      "check": "430px profiles: no undersized controls",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "430px profiles: no clipped button labels",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "430px template profile visible",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "430px empty state on fresh IndexedDB",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "430px create dialog: no horizontal scroll",
+      "ok": true,
+      "detail": {
+        "viewportWidth": 430,
+        "documentClientWidth": 430,
+        "documentScrollWidth": 430,
+        "horizontalOverflowPx": 0,
+        "overflowersCount": 0,
+        "overflowers": [],
+        "clippedFields": [],
+        "clippedControls": [],
+        "clippedControlsCount": 0,
+        "interactiveCount": 6,
+        "smallTargets": [],
+        "smallTargetsCount": 0,
+        "informationalTargets": [
+          {
+            "element": "input[import-file] \"Импорт тарифного профиля из JSON\"",
+            "width": 1,
+            "height": 1,
+            "testId": "import-file",
+            "reason": "visually hidden file input; the Import button opens it"
+          },
+          {
+            "element": "a \"калькулятору\"",
+            "width": 88,
+            "height": 14,
+            "testId": null,
+            "reason": "inline text link inside a paragraph (WCAG inline exception)"
+          }
+        ]
+      }
+    },
+    {
+      "check": "430px create dialog: every button is tappable",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "430px profile created with a user id",
+      "ok": true,
+      "detail": "user-moya-masterskaya"
+    },
+    {
+      "check": "430px created profile is really in IndexedDB",
+      "ok": true,
+      "detail": [
+        "user-moya-masterskaya"
+      ]
+    },
+    {
+      "check": "430px editor: no horizontal scroll",
+      "ok": true,
+      "detail": {
+        "viewportWidth": 430,
+        "documentClientWidth": 430,
+        "documentScrollWidth": 430,
+        "horizontalOverflowPx": 0,
+        "overflowersCount": 0,
+        "overflowers": [],
+        "clippedFields": [],
+        "clippedControls": [],
+        "clippedControlsCount": 0,
+        "interactiveCount": 23,
+        "smallTargets": [],
+        "smallTargetsCount": 0,
+        "informationalTargets": []
+      }
+    },
+    {
+      "check": "430px editor: no undersized controls",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "430px editor: no clipped button labels",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "430px negative price rejected with an inline message",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "430px confirmation checkbox is operated through a ≥44px label",
+      "ok": true,
+      "detail": {
+        "width": 294,
+        "height": 72
+      }
+    },
+    {
+      "check": "430px editor with open tariff: no horizontal scroll",
+      "ok": true,
+      "detail": {
+        "viewportWidth": 430,
+        "documentClientWidth": 430,
+        "documentScrollWidth": 430,
+        "horizontalOverflowPx": 0,
+        "overflowersCount": 0,
+        "overflowers": [],
+        "clippedFields": [],
+        "clippedControls": [],
+        "clippedControlsCount": 0,
+        "interactiveCount": 37,
+        "smallTargets": [],
+        "smallTargetsCount": 0,
+        "informationalTargets": [
+          {
+            "element": "button[tariff-wardrobe-ldsp-russia-confirmed]",
+            "width": 16,
+            "height": 16,
+            "testId": "tariff-wardrobe-ldsp-russia-confirmed",
+            "labelTarget": {
+              "width": 294,
+              "height": 72
+            },
+            "reason": "checkbox box is small; its <label> is the ≥44px touch target"
+          },
+          {
+            "element": "button[tariff-wardrobe-ldsp-russia-service-hardware]",
+            "width": 16,
+            "height": 16,
+            "testId": "tariff-wardrobe-ldsp-russia-service-hardware",
+            "labelTarget": {
+              "width": 294,
+              "height": 44
+            },
+            "reason": "checkbox box is small; its <label> is the ≥44px touch target"
+          },
+          {
+            "element": "button[tariff-wardrobe-ldsp-russia-service-manufacturing]",
+            "width": 16,
+            "height": 16,
+            "testId": "tariff-wardrobe-ldsp-russia-service-manufacturing",
+            "labelTarget": {
+              "width": 294,
+              "height": 44
+            },
+            "reason": "checkbox box is small; its <label> is the ≥44px touch target"
+          },
+          {
+            "element": "button[tariff-wardrobe-ldsp-russia-service-installation]",
+            "width": 16,
+            "height": 16,
+            "testId": "tariff-wardrobe-ldsp-russia-service-installation",
+            "labelTarget": {
+              "width": 294,
+              "height": 44
+            },
+            "reason": "checkbox box is small; its <label> is the ≥44px touch target"
+          }
+        ]
+      }
+    },
+    {
+      "check": "430px editor with open tariff: no undersized controls",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "430px editor with open tariff: no clipped button labels",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "430px dirty indicator after edit",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "430px saved profile version incremented",
+      "ok": true,
+      "detail": 2
+    },
+    {
+      "check": "430px edited price persisted in IndexedDB",
+      "ok": true,
+      "detail": 180000
+    },
+    {
+      "check": "430px confirmation persisted in IndexedDB",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "430px real IndexedDB database present",
+      "ok": true,
+      "detail": [
+        {
+          "name": "salamat-calc",
+          "version": 1
+        }
+      ]
+    },
+    {
+      "check": "430px IndexedDB object stores",
+      "ok": true,
+      "detail": [
+        "meta",
+        "profiles"
+      ]
+    },
+    {
+      "check": "430px editor reopened after a real page reload",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "430px beforeunload handler prevents unload with a dirty draft",
+      "ok": true,
+      "detail": {
+        "defaultPrevented": true,
+        "returnValue": false
+      }
+    },
+    {
+      "check": "430px native beforeunload dialog shown on reload",
+      "ok": true,
+      "detail": {
+        "type": "beforeunload",
+        "message": ""
+      }
+    },
+    {
+      "check": "430px dismissing the beforeunload dialog keeps the dirty draft",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "430px Browser Back asks before discarding a dirty draft",
+      "ok": true,
+      "detail": {
+        "type": "confirm",
+        "message": "Есть несохранённые изменения. Выйти без сохранения?"
+      }
+    },
+    {
+      "check": "430px confirmation text mentions unsaved changes",
+      "ok": true,
+      "detail": "Есть несохранённые изменения. Выйти без сохранения?"
+    },
+    {
+      "check": "430px declining Back keeps the editor mounted",
+      "ok": true,
+      "detail": "http://127.0.0.1:5000/#/tariffs/user-moya-masterskaya"
+    },
+    {
+      "check": "430px declining Back keeps the unsaved draft",
+      "ok": true,
+      "detail": {
+        "name": "Моя мастерская QA"
+      }
+    },
+    {
+      "check": "430px accepting Back asks exactly once",
+      "ok": true,
+      "detail": {
+        "type": "confirm",
+        "message": "Есть несохранённые изменения. Выйти без сохранения?"
+      }
+    },
+    {
+      "check": "430px accepted Back leaves the editor",
+      "ok": true,
+      "detail": "http://127.0.0.1:5000/#/tariffs"
+    },
+    {
+      "check": "430px Forward returns to the editor route",
+      "ok": true,
+      "detail": "http://127.0.0.1:5000/#/tariffs/user-moya-masterskaya"
+    },
+    {
+      "check": "430px Forward shows the saved profile, not the discarded draft",
+      "ok": true,
+      "detail": "Моя мастерская"
+    },
+    {
+      "check": "430px Forward leaves no dirty state behind",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "430px clean editor navigates without a confirmation",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "430px rejected-record warning: no horizontal scroll",
+      "ok": true,
+      "detail": {
+        "viewportWidth": 430,
+        "documentClientWidth": 430,
+        "documentScrollWidth": 430,
+        "horizontalOverflowPx": 0,
+        "overflowersCount": 0,
+        "overflowers": [],
+        "clippedFields": [],
+        "clippedControls": [],
+        "clippedControlsCount": 0,
+        "interactiveCount": 12,
+        "smallTargets": [],
+        "smallTargetsCount": 0,
+        "informationalTargets": [
+          {
+            "element": "input[import-file] \"Импорт тарифного профиля из JSON\"",
+            "width": 1,
+            "height": 1,
+            "testId": "import-file",
+            "reason": "visually hidden file input; the Import button opens it"
+          },
+          {
+            "element": "a \"калькулятору\"",
+            "width": 88,
+            "height": 14,
+            "testId": null,
+            "reason": "inline text link inside a paragraph (WCAG inline exception)"
+          }
+        ]
+      }
+    },
+    {
+      "check": "430px rejected-record warning: no undersized controls",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "430px rejected-record warning: no clipped button labels",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "430px damaged record key is exported",
+      "ok": true,
+      "detail": [
+        "corrupt-qa-record"
+      ]
+    },
+    {
+      "check": "430px raw damaged payload is exported for recovery",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "430px export does not delete the damaged record",
+      "ok": true,
+      "detail": [
+        "corrupt-qa-record",
+        "user-moya-masterskaya"
+      ]
+    },
+    {
+      "check": "430px export keeps valid profiles intact",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "430px valid profile is still listed next to the damaged one",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "430px template editor: no horizontal scroll",
+      "ok": true,
+      "detail": {
+        "viewportWidth": 430,
+        "documentClientWidth": 430,
+        "documentScrollWidth": 430,
+        "horizontalOverflowPx": 0,
+        "overflowersCount": 0,
+        "overflowers": [],
+        "clippedFields": [],
+        "clippedControls": [],
+        "clippedControlsCount": 0,
+        "interactiveCount": 5,
+        "smallTargets": [],
+        "smallTargetsCount": 0,
+        "informationalTargets": []
+      }
+    },
+    {
+      "check": "430px template editor: no clipped button labels",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "430px template profile fields are read-only",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "430px template has no save button",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "430px save bar stays inside the viewport",
+      "ok": true,
+      "detail": {
+        "previewBottom": 523,
+        "barTop": 679,
+        "barHeight": 61,
+        "barInsideViewport": true,
+        "covered": false
+      }
+    },
+    {
+      "check": "430px save bar does not cover the preview content",
+      "ok": true,
+      "detail": {
+        "previewBottom": 523,
+        "barTop": 679,
+        "barHeight": 61,
+        "barInsideViewport": true,
+        "covered": false
+      }
+    },
+    {
+      "check": "430px editor preview: no horizontal scroll",
+      "ok": true,
+      "detail": {
+        "viewportWidth": 430,
+        "documentClientWidth": 430,
+        "documentScrollWidth": 430,
+        "horizontalOverflowPx": 0,
+        "overflowersCount": 0,
+        "overflowers": [],
+        "clippedFields": [],
+        "clippedControls": [],
+        "clippedControlsCount": 0,
+        "interactiveCount": 23,
+        "smallTargets": [],
+        "smallTargetsCount": 0,
+        "informationalTargets": []
+      }
+    },
+    {
+      "check": "430px editor preview: no undersized controls",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "430px editor preview: no clipped button labels",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "check": "430px every visible button/link is hit-testable",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "dialogs": [
+    {
+      "type": "beforeunload",
+      "message": ""
+    },
+    {
+      "type": "confirm",
+      "message": "Есть несохранённые изменения. Выйти без сохранения?"
+    },
+    {
+      "type": "confirm",
+      "message": "Есть несохранённые изменения. Выйти без сохранения?"
+    },
+    {
+      "type": "beforeunload",
+      "message": ""
+    },
+    {
+      "type": "confirm",
+      "message": "Есть несохранённые изменения. Выйти без сохранения?"
+    },
+    {
+      "type": "confirm",
+      "message": "Есть несохранённые изменения. Выйти без сохранения?"
+    },
+    {
+      "type": "beforeunload",
+      "message": ""
+    },
+    {
+      "type": "confirm",
+      "message": "Есть несохранённые изменения. Выйти без сохранения?"
+    },
+    {
+      "type": "confirm",
+      "message": "Есть несохранённые изменения. Выйти без сохранения?"
+    }
+  ],
+  "consoleErrors": [],
+  "finishedAt": "2026-10-20T19:14:52.188Z",
+  "summary": {
+    "total": 165,
+    "passed": 165,
+    "failed": 0
+  }
+}

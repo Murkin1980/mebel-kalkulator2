@@ -1,0 +1,41 @@
+{
+  "note": "Native browser dialogs cannot be screenshotted; texts captured through Playwright dialog events.",
+  "dialogs": [
+    {
+      "type": "beforeunload",
+      "message": ""
+    },
+    {
+      "type": "confirm",
+      "message": "Есть несохранённые изменения. Выйти без сохранения?"
+    },
+    {
+      "type": "confirm",
+      "message": "Есть несохранённые изменения. Выйти без сохранения?"
+    },
+    {
+      "type": "beforeunload",
+      "message": ""
+    },
+    {
+      "type": "confirm",
+      "message": "Есть несохранённые изменения. Выйти без сохранения?"
+    },
+    {
+      "type": "confirm",
+      "message": "Есть несохранённые изменения. Выйти без сохранения?"
+    },
+    {
+      "type": "beforeunload",
+      "message": ""
+    },
+    {
+      "type": "confirm",
+      "message": "Есть несохранённые изменения. Выйти без сохранения?"
+    },
+    {
+      "type": "confirm",
+      "message": "Есть несохранённые изменения. Выйти без сохранения?"
+    }
+  ]
+}

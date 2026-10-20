@@ -1,0 +1,15 @@
+{
+  "format": "salamat-calc-rejected-profiles-v1",
+  "exportedAt": "2026-10-20T19:14:19.893Z",
+  "records": [
+    {
+      "key": "corrupt-qa-record",
+      "reason": "Не пройдена проверка полей: version, currency, categories, calculationMethod, tariffs",
+      "raw": {
+        "profileId": "corrupt-qa-record",
+        "name": "Повреждённая запись QA",
+        "schemaVersion": 1
+      }
+    }
+  ]
+}
