@@ -136,6 +136,10 @@ describe("Salamat Mebel profile", () => {
       assert.ok(tariff.notes, `${tariff.tariffId} must explain why it is empty`);
     });
     const ids = unconfirmed.map((tariff) => tariff.tariffId);
+    salamatMebelProfile.tariffs.filter((tariff) => tariff.categoryId === "wardrobe").forEach((tariff) => {
+      assert.equal(tariff.method, "AREA");
+      assert.equal(tariff.unit, "KZT_PER_M2");
+    });
     assert.ok(ids.includes("stone-countertop"));
     assert.ok(ids.includes("additional-drawer"));
     assert.ok(ids.includes("additional-mirror-door"));
@@ -182,7 +186,7 @@ describe("Salamat Mebel profile", () => {
       () =>
         calculatePrice(salamatMebelProfile, {
           tariffId: "wardrobe-ldsp-russia",
-          dimensionsMm: { lengthMm: 2000 },
+          dimensionsMm: { widthMm: 2000, heightMm: 2500 },
         }),
       (error: unknown) => isPricingError(error) && error.code === "PRICE_NOT_CONFIRMED",
     );
